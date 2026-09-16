@@ -9,12 +9,14 @@ import CustomCursor from "./CustomCursor";
 import PaintingModal from "./PaintingModal";
 import BookshelfModal from "./BookshelfModal";
 import AboutModal from "./AboutModal";
+import SimuYaJamiiModal from "./SimuYaJamiiModal";
 
 export default function OfficeRoom() {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => { setIsMounted(true); }, []);
   const [isPaintingOpen, setIsPaintingOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isBookshelfOpen, setIsBookshelfOpen] = useState(false);
   const [hasGyroscope, setHasGyroscope] = useState(false);
   const [interactionMode, setInteractionMode] = useState<"mouse" | "gyro" | "touch">("mouse");
@@ -201,15 +203,15 @@ export default function OfficeRoom() {
             {/* The Contact Plaque (Above Door) */}
             <div className="absolute bottom-[240px] md:bottom-[380px] right-4 md:right-24 w-32 md:w-56 flex justify-center z-20 pointer-events-auto">
                <motion.button 
-                 onClick={() => setIsPaintingOpen(true)}
+                 onClick={() => setIsBookingOpen(true)}
                  whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(212,175,55,0.6)" }}
                  whileTap={{ scale: 0.95 }}
                  className="w-24 md:w-40 h-10 md:h-12 bg-gradient-to-b from-[#e6c86a] via-[#c69a30] to-[#b38520] border-2 border-[#f3cf65]/50 rounded-sm shadow-[0_10px_20px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.4)] flex flex-col items-center justify-center relative overflow-hidden group cursor-pointer"
                >
                  <div className="absolute inset-1 border border-[#6b4c10]/40 rounded-sm pointer-events-none" />
                  <p className="text-[#38260b] font-serif font-bold text-[7px] md:text-[8px] tracking-[0.1em] md:tracking-[0.15em] text-center uppercase leading-tight drop-shadow-[0_1px_0_rgba(255,255,255,0.3)]">
-                   EMMANUEL BARAKA<br/>
-                   <span className="text-[#1a110c] text-[6px] md:text-[7px]">BOOK APPOINTMENT</span>
+                   BOOK<br/>
+                   <span className="text-[#1a110c] text-[8px] md:text-[10px] leading-tight">APPOINTMENT</span>
                  </p>
                  {/* Click indicator dot */}
                  <div className="absolute right-1 top-1 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-80 animate-ping" />
@@ -423,6 +425,7 @@ export default function OfficeRoom() {
       <PaintingModal isOpen={isPaintingOpen} onClose={() => setIsPaintingOpen(false)} />
       <BookshelfModal isOpen={isBookshelfOpen} onClose={() => setIsBookshelfOpen(false)} />
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
+      <SimuYaJamiiModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
       
       {/* Custom Cursor (Rendered last to stay on top of everything) */}
       <CustomCursor isNightMode={isNightMode} />
