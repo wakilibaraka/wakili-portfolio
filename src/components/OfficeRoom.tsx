@@ -8,11 +8,13 @@ import TeaSteam from "./TeaSteam";
 import CustomCursor from "./CustomCursor";
 import PaintingModal from "./PaintingModal";
 import BookshelfModal from "./BookshelfModal";
+import AboutModal from "./AboutModal";
 
 export default function OfficeRoom() {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => { setIsMounted(true); }, []);
   const [isPaintingOpen, setIsPaintingOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isBookshelfOpen, setIsBookshelfOpen] = useState(false);
   const [hasGyroscope, setHasGyroscope] = useState(false);
   const [interactionMode, setInteractionMode] = useState<"mouse" | "gyro" | "touch">("mouse");
@@ -367,7 +369,7 @@ export default function OfficeRoom() {
       <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6 md:p-8 z-30">
         
         {/* Top-Right Hanging Bulb Indicator */}
-        <motion.div style={{ y: bulbScrollY, opacity: bulbOpacity }} className="absolute top-0 right-12 md:right-32 flex flex-col items-center group pointer-events-none origin-top hover:rotate-6 transition-transform duration-700 ease-in-out">
+        <motion.div style={{ y: bulbScrollY, opacity: bulbOpacity }} onClick={() => setIsAboutOpen(true)} className="absolute top-0 right-12 md:right-32 flex flex-col items-center group pointer-events-auto cursor-pointer origin-top hover:rotate-6 transition-transform duration-700 ease-in-out z-50">
           {/* The Cord */}
           <div className="w-[2px] h-16 md:h-24 bg-[#111] shadow-[1px_0_0_rgba(255,255,255,0.1)]" />
           {/* The Bulb Base */}
@@ -420,6 +422,7 @@ export default function OfficeRoom() {
       {/* Modals */}
       <PaintingModal isOpen={isPaintingOpen} onClose={() => setIsPaintingOpen(false)} />
       <BookshelfModal isOpen={isBookshelfOpen} onClose={() => setIsBookshelfOpen(false)} />
+      <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
       
       {/* Custom Cursor (Rendered last to stay on top of everything) */}
       <CustomCursor isNightMode={isNightMode} />
