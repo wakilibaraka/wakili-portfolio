@@ -30,13 +30,13 @@ export default function OfficeRoom() {
   
   // Room 1 (Reception): Rotates to the right (-90deg on Y axis)
   const scrollRoom1RotateY = useTransform(scrollYProgress, [0, 1], [0, -90]);
-  const scrollRoom1Z = useTransform(scrollYProgress, [0, 1], [0, -200]);
-  const scrollRoom1Opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const scrollRoom1Z = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const scrollRoom1Opacity = useTransform(scrollYProgress, [0.35, 0.55], [1, 0]);
   
   // Room 2 (Office): Rotates in from the left (90deg to 0 on Y axis)
   const scrollRoom2RotateY = useTransform(scrollYProgress, [0, 1], [90, 0]);
-  const scrollRoom2Z = useTransform(scrollYProgress, [0, 1], [-200, 0]);
-  const scrollRoom2Opacity = useTransform(scrollYProgress, [0.4, 1], [0, 1]);
+  const scrollRoom2Z = useTransform(scrollYProgress, [0, 1], [-100, 0]);
+  const scrollRoom2Opacity = useTransform(scrollYProgress, [0.45, 0.65], [0, 1]);
   
   // Hanging Bulb Scroll Animation
   const bulbScrollY = useTransform(scrollYProgress, [0.1, 0.3], [0, -200]);
@@ -161,7 +161,7 @@ export default function OfficeRoom() {
   };
 
   return (
-    <div className={`relative w-full h-[250vh] transition-colors duration-1000 ${isNightMode ? "bg-[#030604]" : "bg-[#09150f]"}`}>
+    <div className={`relative w-full h-[160vh] transition-colors duration-1000 ${isNightMode ? "bg-[#030604]" : "bg-[#09150f]"}`}>
       <div
         className={`fixed inset-0 w-full h-screen overflow-hidden perspective-stage flex items-center justify-center cursor-none transition-colors duration-1000 ${
           isNightMode 
