@@ -57,10 +57,10 @@ export default function CustomCursor({ isNightMode }: { isNightMode: boolean }) 
           rotate: isHovering ? -15 : 0
         }}
         transition={{ 
-          type: "spring", 
-          stiffness: 800, 
-          damping: 35, 
-          mass: 0.5 
+          x: { type: "tween", duration: 0 },
+          y: { type: "tween", duration: 0 },
+          scale: { type: "spring", stiffness: 800, damping: 35 },
+          rotate: { type: "spring", stiffness: 800, damping: 35 }
         }}
       >
         <AnimatePresence mode="wait">

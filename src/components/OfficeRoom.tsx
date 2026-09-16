@@ -424,7 +424,11 @@ export default function OfficeRoom() {
       {/* Modals */}
       <PaintingModal isOpen={isPaintingOpen} onClose={() => setIsPaintingOpen(false)} />
       <BookshelfModal isOpen={isBookshelfOpen} onClose={() => setIsBookshelfOpen(false)} />
+      
+      {/* Custom Cursor (Rendered last to stay on top of everything) */}
+      <CustomCursor isNightMode={isNightMode} />
     </div>
+
       </div>
   );
 }
