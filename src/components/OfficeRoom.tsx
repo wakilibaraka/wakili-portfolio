@@ -376,62 +376,7 @@ export default function OfficeRoom() {
         </motion.div>
         </motion.div>
 
-              {/* ========================================================= */}
-      {/* LAYER 3: Detailed Reception Desk (z: +80px)                 */}
-      {/* ========================================================= */}
-      <motion.div
-        style={{ x: fgShiftX, y: fgShiftY }}
-        className="absolute inset-0 pointer-events-none"
-      >
-          <div className="absolute bottom-8 md:bottom-12 left-8 md:left-24 [transform:translateZ(80px)]">
-             {/* The Desk Base */}
-             <div className="w-56 md:w-80 h-28 md:h-40 bg-gradient-to-b from-[#4f2e1e] to-[#24140d] rounded-tl-xl rounded-tr-sm border-t-4 border-[#683f2a] shadow-[10px_20px_30px_rgba(0,0,0,0.8)] p-4 flex flex-col relative">
-                {/* Front Panel Wainscoting */}
-                <div className="w-full h-full border-2 border-[#683f2a]/30 rounded-sm flex items-center justify-center gap-4">
-                   <div className="w-1/3 h-2/3 border border-[#683f2a]/20" />
-                   <div className="w-1/3 h-2/3 border border-[#683f2a]/20" />
-                </div>
-                
-                {/* Top Desk Surface Clutter */}
-                <div className="absolute -top-4 md:-top-6 left-0 w-full h-6 flex items-end justify-between px-4">
-                   {/* Modern Computer Monitor */}
-                   <div className="w-16 md:w-24 h-12 md:h-16 bg-[#111] border-2 border-[#222] rounded-sm shadow-xl flex items-center justify-center relative -rotate-6">
-                      <div className="w-full h-full border-[3px] border-[#333] rounded-sm flex items-center justify-center overflow-hidden relative">
-                         {/* Screen glow */}
-                         <div className="absolute inset-0 bg-[#e0f7fa]/10 pointer-events-none" />
-                         <div className="w-full h-1/4 bg-[#e0f7fa]/20 absolute top-0" />
-                      </div>
-                      <div className="absolute -bottom-2 w-4 h-2 bg-[#444]" />
-                      <div className="absolute -bottom-3 w-8 h-1 bg-[#555] rounded-full" />
-                   </div>
-                   
-                   {/* Yellow BarakaLines Sign */}
-                   <div className="w-12 md:w-16 h-6 md:h-8 bg-gradient-to-br from-[#f3cf65] to-[#c69a30] rounded-sm shadow-md flex items-center justify-center border border-[#d4af37] rotate-6 mb-1">
-                      <span className="text-[5px] md:text-[6px] font-serif font-bold text-[#38260b] uppercase">BarakaLines</span>
-                   </div>
-                </div>
-
-                {/* Left Side Printer */}
-                <div className="absolute -left-6 bottom-4 w-12 md:w-16 h-10 md:h-14 bg-[#e5e0d3] rounded shadow-xl flex flex-col items-center justify-start pt-1 border border-[#ccc]">
-                   <div className="w-3/4 h-2 bg-[#333] rounded-sm" />
-                   {/* Printed paper sticking out */}
-                   <div className="w-3/4 h-4 bg-white mt-1 shadow-sm rotate-2" />
-                </div>
-                
-                {/* Floor Clutter (Papers) */}
-                <div className="absolute -bottom-6 left-12 w-6 h-8 bg-white rotate-[15deg] shadow-md opacity-90" />
-                <div className="absolute -bottom-4 left-16 w-6 h-8 bg-white -rotate-[25deg] shadow-md opacity-80" />
-                
-                {/* Desk Picture/Painting */}
-                <div className="absolute -top-12 right-2 w-10 md:w-14 h-12 md:h-16 bg-[#2a1a11] border-4 border-[#8c7324] shadow-lg flex items-center justify-center rotate-12">
-                   <div className="w-3/4 h-3/4 bg-[#163024] flex items-center justify-center">
-                     <Scale className="w-4 h-4 text-[#d4af37]" />
-                   </div>
-                </div>
-             </div>
-          </div>
-      </motion.div>
-
+        
         {/* ROOM 2: Scroll Target */}
         <motion.div
           style={{ rotateY: scrollRoom2RotateY, z: scrollRoom2Z, opacity: scrollRoom2Opacity }}
@@ -444,34 +389,46 @@ export default function OfficeRoom() {
       {/* LAYER 4: Interface HUD / Header Overlay (z: +150px)       */}
       {/* ========================================================= */}
       <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6 md:p-8 z-30">
-        {/* Header HUD */}
-        {/* Centered Glass Watermark Header */}
-        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
-        <header className="flex justify-center pt-2 md:pt-4 pointer-events-none">
-          <div className="flex flex-col items-center gap-1 opacity-75 mix-blend-screen transition-opacity duration-1000">
-             <div className="w-10 h-10 rounded-full border border-[#f3cf65]/30 flex items-center justify-center bg-[#f3cf65]/10 backdrop-blur-md">
-               <Scale className="w-5 h-5 text-[#f3cf65]" />
-             </div>
-             <h1 className="font-serif text-lg md:text-xl font-bold tracking-widest text-[#f3cf65] uppercase mt-2">
-               Emmanuel Baraka
-             </h1>
-             <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-[#f3cf65]/60 font-light">
-               Advocate & Policy Strategist
-             </p>
+        
+        {/* Top-Right Hanging Bulb Indicator */}
+        <div className="absolute top-0 right-12 md:right-32 flex flex-col items-center group pointer-events-none origin-top hover:rotate-6 transition-transform duration-700 ease-in-out">
+          {/* The Cord */}
+          <div className="w-[2px] h-16 md:h-24 bg-[#111] shadow-[1px_0_0_rgba(255,255,255,0.1)]" />
+          {/* The Bulb Base */}
+          <div className="w-4 h-5 bg-gradient-to-b from-[#222] to-[#444] rounded-t-sm border border-[#111]" />
+          {/* The Bulb Glass */}
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center -mt-1 transition-all duration-1000 ${
+            isNightMode 
+              ? "bg-[#ffaa00] shadow-[0_0_50px_rgba(255,170,0,0.8),inset_0_0_10px_rgba(255,255,255,0.8)]"
+              : "bg-white/10 shadow-[inset_0_0_5px_rgba(255,255,255,0.2)] border border-white/20 backdrop-blur-sm"
+          }`}>
+            {/* Inner filament */}
+            <div className={`w-3 h-3 border border-x-transparent border-t-transparent rounded-b-full transition-colors duration-1000 ${
+              isNightMode ? "border-b-[#fff] shadow-[0_0_5px_white]" : "border-b-white/40"
+            }`} />
           </div>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4af37] to-[#99791e] p-0.5 shadow-lg">
+        </div>
+
+        {/* Header HUD */}
+        <header className="flex justify-between items-start pointer-events-none relative z-40">
+          
+          {/* Top-Left Logo & Title */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4af37] to-[#99791e] p-[1px] shadow-lg">
               <div className="w-full h-full bg-[#163024] rounded-[10px] flex items-center justify-center text-[#f3cf65]">
                 <Scale className="w-5 h-5" />
               </div>
             </div>
             <div>
-              <h1 className="font-serif text-lg md:text-xl font-bold tracking-wide text-[#f3cf65]">
+              <h1 className="font-serif text-lg md:text-xl font-bold tracking-wide text-[#f3cf65] drop-shadow-md">
                 Emmanuel Baraka
               </h1>
-              <p className="text-xs uppercase tracking-widest text-[#d4af37]/80">
+              <p className="text-[9px] md:text-xs uppercase tracking-widest text-[#d4af37]/80 font-medium">
                 Advocate & Policy Strategist
               </p>
             </div>
+          </div>
+
         </header>
 
         {/* Footer Ambient Cue */}
