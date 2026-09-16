@@ -203,7 +203,7 @@ export default function OfficeRoom() {
                  <div className="absolute inset-1 border border-[#6b4c10]/40 rounded-sm pointer-events-none" />
                  <p className="text-[#38260b] font-serif font-bold text-[7px] md:text-[8px] tracking-[0.1em] md:tracking-[0.15em] text-center uppercase leading-tight drop-shadow-[0_1px_0_rgba(255,255,255,0.3)]">
                    EMMANUEL BARAKA<br/>
-                   <span className="text-[#1a110c] text-[6px] md:text-[7px]">CONTACT ME</span>
+                   <span className="text-[#1a110c] text-[6px] md:text-[7px]">BOOK APPOINTMENT</span>
                  </p>
                  {/* Click indicator dot */}
                  <div className="absolute right-1 top-1 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-80 animate-ping" />
@@ -433,12 +433,7 @@ export default function OfficeRoom() {
 
         {/* Footer Ambient Cue */}
         <footer className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#d4af37]/75">
-          <div className="flex items-center gap-2 bg-[#0e2018]/80 backdrop-blur px-4 py-2 rounded-full border border-[#d4af37]/20">
-            <Compass className="w-4 h-4 text-[#f3cf65] animate-spin [animation-duration:12s]" />
-            <span>
-              {hasGyroscope ? "Tilt phone to shift perspective" : "Move mouse to explore the chamber"}
-            </span>
-          </div>
+
 
           <p className="text-[11px] font-serif italic text-white/60">
             © {new Date().getFullYear()} Emmanuel Baraka • wakili.barakalines.com
