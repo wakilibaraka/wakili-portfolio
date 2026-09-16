@@ -1,2 +1,2 @@
-:HL["/wakili-portfolio/_next/static/chunks/1x29dnax50bg-.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"2XGEe-3wecqhqO8Kj6C96"}
+:HL["/wakili-portfolio/_next/static/chunks/207baebqglm1o.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"EggZfE8C_X00jKFp5frJ7"}
