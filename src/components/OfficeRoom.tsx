@@ -9,6 +9,7 @@ import CustomCursor from "./CustomCursor";
 import PaintingModal from "./PaintingModal";
 import BookshelfModal from "./BookshelfModal";
 import AboutModal from "./AboutModal";
+import { useTelephoneRing } from "../hooks/useTelephoneRing";
 import SimuYaJamiiModal from "./SimuYaJamiiModal";
 
 export default function OfficeRoom() {
@@ -17,6 +18,8 @@ export default function OfficeRoom() {
   const [isPaintingOpen, setIsPaintingOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [isPhonePickedUp, setIsPhonePickedUp] = useState(false);
+  const { playPickUpClack } = useTelephoneRing();
   const [isBookshelfOpen, setIsBookshelfOpen] = useState(false);
   const [hasGyroscope, setHasGyroscope] = useState(false);
   const [interactionMode, setInteractionMode] = useState<"mouse" | "gyro" | "touch">("mouse");
@@ -243,12 +246,16 @@ export default function OfficeRoom() {
             </div>
 
             {/* The Wall Payphone (Contact Us) */}
-            <div className="absolute top-48 md:top-56 left-4 md:left-24 pointer-events-auto scale-75 md:scale-100 origin-left z-20">
+            <div className="absolute top-48 md:top-56 left-4 md:left-24 pointer-events-auto scale-75 md:scale-100 origin-left z-20 touch-manipulation">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setIsPaintingOpen(true)}
-                className="group cursor-pointer relative"
+                onClick={() => {
+                  playPickUpClack();
+                  setIsPhonePickedUp(true);
+                  setTimeout(() => setIsPaintingOpen(true), 300);
+                }}
+                className={`group cursor-pointer relative ${!isPhonePickedUp ? "animate-telephone-ring" : ""}`}
               >
                  {/* Payphone Backboard */}
                  <div className="w-12 h-20 bg-[#2a1a11] rounded-sm border-2 border-[#1a110c] shadow-[10px_10px_20px_rgba(0,0,0,0.8)] flex flex-col items-center pt-1" />
@@ -265,8 +272,10 @@ export default function OfficeRoom() {
                     {/* Coin Return */}
                     <div className="w-4 h-3 mt-2 bg-[#111] rounded-sm border border-[#333]" />
                  </div>
-                 {/* The Handset (Hanging on the left) */}
-                 <div className="absolute top-2 -left-3 w-4 h-12 flex flex-col justify-between items-center rotate-[-10deg] group-hover:rotate-[-20deg] transition-transform z-20 pointer-events-none">
+                 {/* The Handset */}
+                 <div className={`absolute top-2 -left-3 w-4 h-12 flex flex-col justify-between items-center transition-all duration-300 z-20 pointer-events-none ${
+                   isPhonePickedUp ? "-translate-x-6 -translate-y-4 rotate-[-60deg]" : "rotate-[-10deg] group-hover:rotate-[-20deg]"
+                 }`}>
                     {/* Earpiece */}
                     <div className="w-4 h-4 bg-[#111] rounded-full border border-[#222]" />
                     {/* Handle */}
@@ -284,7 +293,7 @@ export default function OfficeRoom() {
             </div>
 
             {/* Interactive Light Switch (Moved next to double doors) */}
-            <div className="absolute top-48 md:top-64 right-40 md:right-[350px] pointer-events-auto scale-75 md:scale-100 origin-right">
+            <div className="absolute top-48 md:top-64 right-40 md:right-[350px] pointer-events-auto scale-75 md:scale-100 origin-right touch-manipulation">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -412,7 +421,7 @@ export default function OfficeRoom() {
       <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6 md:p-8 z-30">
         
         {/* Top-Right Hanging Bulb Indicator */}
-        <motion.div style={{ y: bulbScrollY, opacity: bulbOpacity }} onClick={() => setIsAboutOpen(true)} className="absolute top-0 right-12 md:right-32 flex flex-col items-center group pointer-events-auto cursor-pointer origin-top hover:rotate-6 transition-transform duration-700 ease-in-out z-50 animate-swing">
+        <motion.div style={{ y: bulbScrollY, opacity: bulbOpacity }} onClick={() => setIsAboutOpen(true)} className="absolute top-0 right-12 md:right-32 flex flex-col items-center group pointer-events-auto cursor-pointer origin-top hover:rotate-6 transition-transform duration-700 ease-in-out z-50 animate-swing touch-manipulation">
           {/* The Cord */}
           <div className="w-[2px] h-16 md:h-24 bg-[#111] shadow-[1px_0_0_rgba(255,255,255,0.1)]" />
           {/* The Bulb Base */}
@@ -463,7 +472,7 @@ export default function OfficeRoom() {
       </div>
 
       {/* Modals */}
-      <PaintingModal isOpen={isPaintingOpen} onClose={() => setIsPaintingOpen(false)} />
+      <PaintingModal isOpen={isPaintingOpen} onClose={() => { setIsPaintingOpen(false); setIsPhonePickedUp(false); }} />
       <BookshelfModal isOpen={isBookshelfOpen} onClose={() => setIsBookshelfOpen(false)} />
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
       <SimuYaJamiiModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
