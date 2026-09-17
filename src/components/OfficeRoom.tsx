@@ -11,6 +11,7 @@ import BookshelfModal from "./BookshelfModal";
 import AboutModal from "./AboutModal";
 import ContactModal from "./ContactModal";
 import { useTelephoneRing } from "../hooks/useTelephoneRing";
+import { useClickSound } from "../hooks/useClickSound";
 import SimuYaJamiiModal from "./SimuYaJamiiModal";
 
 
@@ -35,6 +36,7 @@ export default function OfficeRoom() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isPhonePickedUp, setIsPhonePickedUp] = useState(false);
   const { playPickUpClack } = useTelephoneRing();
+  const { playClickSound } = useClickSound();
   const [isBookshelfOpen, setIsBookshelfOpen] = useState(false);
   const [isDeskPhoneOpen, setIsDeskPhoneOpen] = useState(false);
   const [hasGyroscope, setHasGyroscope] = useState(false);
@@ -64,30 +66,7 @@ export default function OfficeRoom() {
   const doorRightRotateY = useTransform(scrollYProgress, [0, 0.4], prefersReducedMotion ? [15, 15] : [0, 110]);
 
 
-  // Play mechanical click using Web Audio API (zero external assets needed)
-  const playClickSound = () => {
-    try {
-      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-      const ctx = new AudioContext();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(150, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.05);
-      
-      gain.gain.setValueAtTime(0.5, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
-      
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.05);
-    } catch (e) {
-      console.warn("Audio not supported");
-    }
-  };
+
 
   const toggleNightMode = () => {
     playClickSound();

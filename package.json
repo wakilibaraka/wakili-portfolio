@@ -10,8 +10,6 @@
     "deploy": "next build && gh-pages -d out -t --dotfiles"
   },
   "dependencies": {
-    "@splinetool/react-spline": "^4.1.0",
-    "@splinetool/runtime": "^2.0.52",
     "clsx": "^2.1.1",
     "framer-motion": "^13.3.0",
     "lucide-react": "^1.46.0",
