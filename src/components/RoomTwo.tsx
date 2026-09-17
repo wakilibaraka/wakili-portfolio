@@ -131,7 +131,7 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
         </div>
 
         {/* CSS Character: Emmanuel Baraka */}
-        <div className="absolute bottom-16 md:bottom-20 flex flex-col items-center z-10 scale-90 md:scale-100 origin-bottom animate-breathe">
+        <div className="absolute bottom-16 md:bottom-20 flex flex-col items-center z-10 scale-90 md:scale-100 origin-bottom animate-breathe [transform-style:preserve-3d]">
           
           {/* Head & Face */}
           <div className="relative w-24 h-32 mb-1">
@@ -167,7 +167,7 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
           </div>
 
           {/* Torso / Suit */}
-          <div className="relative w-44 h-40 flex flex-col items-center z-0">
+          <div className="relative w-44 h-40 flex flex-col items-center z-0 [transform-style:preserve-3d]">
             {/* Shoulders */}
             <div className="absolute top-0 w-full h-full bg-[#151515] rounded-t-3xl shadow-[inset_0_10px_20px_rgba(0,0,0,0.8)]" />
             {/* White Shirt Collar */}
@@ -181,9 +181,9 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
             
             {/* Arms reaching to laptop */}
             <div className="absolute top-8 -left-6 w-16 h-32 bg-[#151515] rounded-l-2xl origin-top rotate-45 shadow-lg" />
-            <div className="absolute top-8 -right-6 w-16 h-32 bg-[#151515] rounded-r-2xl origin-top -rotate-45 shadow-lg flex flex-col justify-end items-center pb-2">
-               {/* Hand holding the teacup */}
-               <div className="rotate-45 translate-x-2 translate-y-4">
+            <div className="absolute top-8 -right-6 w-16 h-32 bg-[#151515] rounded-r-2xl origin-top -rotate-45 shadow-lg flex flex-col justify-end items-center pb-2 [transform-style:preserve-3d]">
+               {/* Hand holding the teacup (brought forward in Z space to clear the desk) */}
+               <div className="absolute bottom-4 left-6 [transform:translateZ(90px)_rotate(45deg)]">
                  <TeaSteam />
                </div>
             </div>
