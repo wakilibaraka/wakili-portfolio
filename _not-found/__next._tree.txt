@@ -1,3 +1,3 @@
 :HL["/wakili-portfolio/_next/static/chunks/004kzzobhs6qj.css","style"]
-:HL["/wakili-portfolio/_next/static/chunks/0wtjff9j5c5l-.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"TMw3G-C4k6UJFYhFcj1CA"}
+:HL["/wakili-portfolio/_next/static/chunks/361o6ny34_q01.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"YFHBTp9sldKY9PLc-vZ5n"}
