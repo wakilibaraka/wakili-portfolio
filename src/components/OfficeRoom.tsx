@@ -8,6 +8,7 @@ import TeaSteam from "./TeaSteam";
 import CustomCursor from "./CustomCursor";
 import PaintingModal from "./PaintingModal";
 import BookshelfModal from "./BookshelfModal";
+import MissionModal from "./MissionModal";
 import AboutModal from "./AboutModal";
 import ContactModal from "./ContactModal";
 import { useTelephoneRing } from "../hooks/useTelephoneRing";
@@ -38,6 +39,7 @@ export default function OfficeRoom() {
   const { playPickUpClack } = useTelephoneRing();
   const { playClickSound } = useClickSound();
   const [isBookshelfOpen, setIsBookshelfOpen] = useState(false);
+  const [isMissionOpen, setIsMissionOpen] = useState(false);
   const [isDeskPhoneOpen, setIsDeskPhoneOpen] = useState(false);
   const [hasGyroscope, setHasGyroscope] = useState(false);
   const [interactionMode, setInteractionMode] = useState<"mouse" | "gyro" | "touch">("mouse");
@@ -426,7 +428,7 @@ export default function OfficeRoom() {
           style={{ rotateY: scrollRoom2RotateY, z: scrollRoom2Z, opacity: scrollRoom2Opacity }}
           className="absolute inset-0 preserve-3d flex items-center justify-center pointer-events-none"
         >
-          <RoomTwo isNightMode={isNightMode} rotateX={rotateX} rotateY={rotateY} panX={panX} panY={panY} onOpenWritings={() => setIsBookshelfOpen(true)} />
+          <RoomTwo isNightMode={isNightMode} rotateX={rotateX} rotateY={rotateY} panX={panX} panY={panY} onOpenWritings={() => setIsBookshelfOpen(true)} onOpenMission={() => setIsMissionOpen(true)} />
         </motion.div>
 
       {/* ========================================================= */}
@@ -500,6 +502,7 @@ export default function OfficeRoom() {
       {/* Modals */}
       <PaintingModal isOpen={isPaintingOpen} onClose={() => { setIsPaintingOpen(false); setIsPhonePickedUp(false); }} />
       <BookshelfModal isOpen={isBookshelfOpen} onClose={() => setIsBookshelfOpen(false)} />
+      <MissionModal isOpen={isMissionOpen} onClose={() => setIsMissionOpen(false)} />
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
       <ContactModal isOpen={isDeskPhoneOpen} onClose={() => setIsDeskPhoneOpen(false)} />
       <SimuYaJamiiModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />

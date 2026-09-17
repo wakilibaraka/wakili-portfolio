@@ -10,9 +10,10 @@ interface RoomTwoProps {
   panX: MotionValue<number>;
   panY: MotionValue<number>;
   onOpenWritings: () => void;
+  onOpenMission: () => void;
 }
 
-export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onOpenWritings }: RoomTwoProps) {
+export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onOpenWritings, onOpenMission }: RoomTwoProps) {
   const prefersReducedMotion = useReducedMotion();
   return (
     <motion.div
@@ -59,13 +60,43 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
         
         {/* Flat Evenly Green Back Wall */}
         <div className={`absolute w-[95%] h-[95%] rounded-2xl border-4 shadow-2xl transition-colors duration-1000 flex items-center justify-center overflow-hidden ${isNightMode ? "bg-green-racing-deep border-shade-61" : "bg-green-racing border-wood-dark"}`}>
+
+          {/* Center: Massive Arched Window */}
+          <div className="absolute top-10 w-[45%] h-[85%] border-[12px] border-wood-dark rounded-t-full bg-transparent shadow-[0_0_50px_rgba(0,0,0,0.8),inset_0_0_40px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col justify-end">
+             {/* Window Grilles */}
+             <div className="absolute inset-0 grid grid-cols-3 grid-rows-4 pointer-events-none z-10">
+                {[...Array(12)].map((_, i) => (
+                  <div key={i} className="border-2 border-wood-dark/90 shadow-sm" />
+                ))}
+             </div>
+             {/* Glass Reflection / Atmospheric haze */}
+             <div className={`absolute inset-0 pointer-events-none transition-colors duration-1000 z-0 ${
+               isNightMode ? "bg-gradient-to-br from-shade-7/10 via-transparent to-black/50" : "bg-gradient-to-tr from-shade-8/20 via-transparent to-transparent"
+             }`} />
+          </div>
+
+          {/* Right: Wall Art & Robes */}
+          <div className="absolute right-2 md:right-24 top-16 md:top-24 flex flex-col items-center gap-12 scale-75 md:scale-100 origin-right">
+            {/* Framed Quote */}
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={onOpenMission}
+              className="w-40 h-40 bg-wood-blackest border-[6px] border-accent-brass shadow-[10px_10px_20px_rgba(0,0,0,0.6)] p-2 flex flex-col items-center justify-center text-center cursor-pointer pointer-events-auto group relative"
+            >
+              <div className="absolute inset-0 bg-accent-brass/0 group-hover:bg-accent-brass/5 transition-colors" />
+              <Scale className="w-6 h-6 text-accent-brass mb-2 opacity-80 group-hover:opacity-100 transition-opacity" />
+              <p className="font-serif text-accent-brass font-bold tracking-widest text-xs leading-relaxed group-hover:text-accent-gold transition-colors">
+                JUSTICE<br/>EQUITY<br/><span className="text-[10px]">&amp;</span><br/>TRUTH
+              </p>
+            </motion.div>
           
           {/* Left: The Grand Bookshelf (Writings Hotspot) */}
           <motion.div 
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onOpenWritings}
-            className="absolute left-2 md:left-16 top-16 md:top-16 w-32 md:w-64 h-64 md:h-96 rounded bg-wood-dark border-4 border-wood-mahogany shadow-[15px_15px_30px_rgba(0,0,0,0.6)] p-2 md:p-3 flex flex-col justify-between cursor-pointer pointer-events-auto group relative scale-75 md:scale-100 origin-left"
+            className="relative w-40 md:w-56 h-56 md:h-80 rounded bg-wood-dark border-4 border-wood-mahogany shadow-[15px_15px_30px_rgba(0,0,0,0.6)] p-2 flex flex-col justify-between cursor-pointer pointer-events-auto group mt-4 hover:scale-[1.02] active:scale-[0.98] transition-transform"
           >
             {/* Attention Badge */}
             <div className="absolute -top-3 -right-3 px-3 py-1 bg-accent-terracotta rounded-full shadow-lg flex items-center gap-1.5 opacity-90 group-hover:opacity-100 group-hover:bg-shade-62 transition-colors z-20">
@@ -89,44 +120,6 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
                <div className="w-5 h-20 bg-green-racing rounded-t-sm border-r border-black/30 ml-2" />
             </div>
           </motion.div>
-
-          {/* Center: Massive Arched Window */}
-          <div className="absolute top-10 w-[45%] h-[85%] border-[12px] border-wood-dark rounded-t-full bg-transparent shadow-[0_0_50px_rgba(0,0,0,0.8),inset_0_0_40px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col justify-end">
-             {/* Window Grilles */}
-             <div className="absolute inset-0 grid grid-cols-3 grid-rows-4 pointer-events-none z-10">
-                {[...Array(12)].map((_, i) => (
-                  <div key={i} className="border-2 border-wood-dark/90 shadow-sm" />
-                ))}
-             </div>
-             {/* Glass Reflection / Atmospheric haze */}
-             <div className={`absolute inset-0 pointer-events-none transition-colors duration-1000 z-0 ${
-               isNightMode ? "bg-gradient-to-br from-shade-7/10 via-transparent to-black/50" : "bg-gradient-to-tr from-shade-8/20 via-transparent to-transparent"
-             }`} />
-          </div>
-
-          {/* Right: Wall Art & Robes */}
-          <div className="absolute right-2 md:right-24 top-16 md:top-24 flex flex-col items-center gap-12 scale-75 md:scale-100 origin-right">
-            {/* Framed Quote */}
-            <div className="w-40 h-40 bg-wood-blackest border-[6px] border-accent-brass shadow-[10px_10px_20px_rgba(0,0,0,0.6)] p-2 flex flex-col items-center justify-center text-center">
-              <Scale className="w-6 h-6 text-accent-brass mb-2 opacity-80" />
-              <p className="font-serif text-accent-brass font-bold tracking-widest text-xs leading-relaxed">
-                JUSTICE<br/>EQUITY<br/><span className="text-[10px]">&amp;</span><br/>TRUTH
-              </p>
-            </div>
-            
-            {/* Credentials Panel */}
-            <div className="w-48 bg-wood-blackest border-[4px] border-accent-brass shadow-[10px_10px_20px_rgba(0,0,0,0.6)] p-3 text-accent-brass flex flex-col gap-1.5 -mt-6">
-              <h3 className="font-serif font-bold text-[9px] tracking-widest text-center border-b border-accent-brass/30 pb-1 mb-1">EDUCATION</h3>
-              <ul className="text-[7px] tracking-wider space-y-1.5 font-sans opacity-90 leading-[1.2]">
-                <li><span className="font-bold text-accent-gold">LL.B (Hons, Upper Second)</span><br/>Kisii University</li>
-                <li><span className="font-bold text-accent-gold">Advocates Training Program</span><br/>Kenya School of Law</li>
-                <li><span className="font-bold text-accent-gold">MSc, Security & Human Rights</span><br/>Kenya School of Law (ongoing)</li>
-              </ul>
-              <h3 className="font-serif font-bold text-[9px] tracking-widest text-center border-b border-accent-brass/30 pb-1 mb-1 mt-2">FOCUS</h3>
-              <p className="text-[7px] tracking-wider font-sans opacity-90 leading-tight text-center">
-                Constitutional & human-rights litigation · Strategic litigation · Policy
-              </p>
-            </div>
           </div>
 
         </div>
