@@ -14,7 +14,7 @@ export default function SimuYaJamiiModal({ isOpen, onClose }: BookingModalProps)
   const [activeStep, setActiveStep] = useState(0);
 
   const handleBookWhatsapp = () => {
-    window.open("https://wa.me/254700000000?text=Hello,%20I%20would%20like%20to%20book%20a%20legal%20consultation", "_blank");
+    window.open("https://wa.me/254712345678?text=Hello%20Emmanuel%2C%20I%27d%20like%20to%20book%20a%20consultation.", "_blank");
     setActiveStep(1);
     setTimeout(() => { setActiveStep(0); onClose(); }, 3000);
   };
@@ -88,7 +88,7 @@ export default function SimuYaJamiiModal({ isOpen, onClose }: BookingModalProps)
                       WhatsApp Booking
                     </button>
                     <button 
-                      onClick={() => { window.location.href = "mailto:appointments@barakalines.com"; }}
+                      onClick={() => { window.location.href = "mailto:info@barakalines.com"; }}
                       className="w-full py-4 rounded-xl bg-gradient-to-r from-accent-gold to-accent-brass text-shade-3 font-bold tracking-wide uppercase text-sm shadow-[0_5px_15px_rgba(243,207,101,0.3)] flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-transform"
                     >
                       <CalendarClock className="w-5 h-5" />

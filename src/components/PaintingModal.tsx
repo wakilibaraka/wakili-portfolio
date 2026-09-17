@@ -74,13 +74,13 @@ export default function PaintingModal({ isOpen, onClose }: PaintingModalProps) {
                     <Mail className="w-5 h-5 text-accent-brass" />
                     <div>
                       <p className="text-[11px] uppercase tracking-wider text-accent-brass/70">Email Inquiries</p>
-                      <a href="mailto:contact@barakalines.com" className="text-sm font-medium hover:underline">
-                        contact@barakalines.com
+                      <a href="mailto:info@barakalines.com" className="text-sm font-medium hover:underline">
+                        info@barakalines.com
                       </a>
                     </div>
                   </div>
                   <button
-                    onClick={() => copyToClipboard("contact@barakalines.com", "email")}
+                    onClick={() => copyToClipboard("info@barakalines.com", "email")}
                     className="p-2 text-xs rounded-lg hover:bg-accent-brass/15 text-accent-brass transition-colors"
                   >
                     {copiedField === "email" ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
@@ -93,8 +93,8 @@ export default function PaintingModal({ isOpen, onClose }: PaintingModalProps) {
                     <Phone className="w-5 h-5 text-accent-brass" />
                     <div>
                       <p className="text-[11px] uppercase tracking-wider text-accent-brass/70">Chambers Direct Line</p>
-                      <a href="tel:+254700000000" className="text-sm font-medium hover:underline">
-                        +254 (0) 700 000 000
+                      <a href="tel:254712345678" className="text-sm font-medium hover:underline">
+                        +254 712 345 678
                       </a>
                     </div>
                   </div>
