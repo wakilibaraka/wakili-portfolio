@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, MotionValue, useReducedMotion } from "framer-motion";
 import { Scale, BookOpen } from "lucide-react";
-import TeaSteam from "./TeaSteam";
 
 interface RoomTwoProps {
   isNightMode: boolean;
@@ -187,13 +186,30 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
             <div className="absolute top-0 left-[30%] w-6 h-32 bg-mono-950 border-r border-black/40 rotate-12 shadow-xl" />
             <div className="absolute top-0 right-[30%] w-6 h-32 bg-mono-950 border-l border-black/40 -rotate-12 shadow-xl" />
             
-            {/* Arms reaching to laptop */}
-            <div className="absolute top-8 -left-6 w-16 h-32 bg-mono-925 rounded-l-2xl origin-top rotate-45 shadow-lg" />
-            <div className="absolute top-8 -right-6 w-16 h-32 bg-mono-925 rounded-r-2xl origin-top -rotate-45 shadow-lg flex flex-col justify-end items-center pb-2 [transform-style:preserve-3d]">
-               {/* Hand holding the teacup (brought forward in Z space to clear the desk) */}
-               <div className="absolute bottom-4 left-6 [transform:translateZ(90px)_rotate(45deg)]">
-                 <TeaSteam />
-               </div>
+            {/* Arms holding a book */}
+            <div className="absolute top-8 -left-3 w-16 h-32 bg-mono-925 rounded-l-2xl origin-top rotate-[25deg] shadow-lg flex flex-col justify-end items-center pb-2 z-10">
+               <div className="w-5 h-6 bg-shade-71 rounded-full translate-x-2 translate-y-1 shadow-inner" />
+            </div>
+            <div className="absolute top-8 -right-3 w-16 h-32 bg-mono-925 rounded-r-2xl origin-top -rotate-[25deg] shadow-lg flex flex-col justify-end items-center pb-2 z-10">
+               <div className="w-5 h-6 bg-shade-71 rounded-full -translate-x-2 translate-y-1 shadow-inner" />
+            </div>
+            
+            {/* The Book being held */}
+            <div className="absolute top-[110px] left-1/2 -translate-x-1/2 w-24 h-14 bg-shade-13 rounded-sm border-r border-l border-wood-mahogany shadow-[0_15px_30px_rgba(0,0,0,0.8)] z-20 flex p-0.5 [transform:translateZ(40px)_rotateX(20deg)]">
+                {/* Left Page */}
+                <div className="w-1/2 h-full bg-paper-cream border-r border-black/10 rounded-l-sm shadow-inner flex flex-col gap-1.5 p-1.5">
+                   <div className="w-full h-1 bg-black/15 rounded-full" />
+                   <div className="w-5/6 h-1 bg-black/15 rounded-full" />
+                   <div className="w-full h-1 bg-black/15 rounded-full" />
+                   <div className="w-4/6 h-1 bg-black/15 rounded-full" />
+                </div>
+                {/* Right Page */}
+                <div className="w-1/2 h-full bg-paper-cream rounded-r-sm shadow-inner flex flex-col gap-1.5 p-1.5">
+                   <div className="w-full h-1 bg-black/15 rounded-full" />
+                   <div className="w-full h-1 bg-black/15 rounded-full" />
+                   <div className="w-5/6 h-1 bg-black/15 rounded-full" />
+                   <div className="w-3/4 h-1 bg-black/15 rounded-full" />
+                </div>
             </div>
           </div>
         </div>
@@ -265,18 +281,7 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
                 <p className="text-accent-gold/70 text-[5px] tracking-[0.1em] uppercase text-center">LL.B (Hons) · Advocates Training Program, KSL</p>
              </div>
 
-             {/* Stack of Leather Treatises */}
-             <div className="flex flex-col items-center mt-2 rotate-6">
-                <div className="w-28 h-5 bg-shade-12 rounded-sm border-l border-white/20 shadow-sm flex items-center px-2">
-                   <div className="w-1 h-3 bg-accent-brass rounded-sm" />
-                </div>
-                <div className="w-32 h-6 bg-green-racing rounded-sm border-l border-accent-brass/40 shadow-sm mt-0.5 flex items-center px-2">
-                   <div className="w-1 h-4 bg-accent-brass rounded-sm" />
-                </div>
-                <div className="w-36 h-7 bg-wood-dark rounded-sm border-l border-white/20 shadow-md mt-0.5 flex items-center px-2">
-                   <div className="w-1 h-5 bg-accent-brass rounded-sm" />
-                </div>
-             </div>
+
           </div>
         </div>
       </div>

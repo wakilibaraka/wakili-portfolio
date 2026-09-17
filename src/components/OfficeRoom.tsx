@@ -243,8 +243,85 @@ export default function OfficeRoom() {
                 </motion.div>
             </div>
 
+            {/* Standing Figure (Waiting for phone) */}
+            <div className="absolute bottom-4 md:bottom-2 left-2 md:left-12 scale-[0.45] md:scale-50 origin-bottom z-10 flex flex-col items-center pointer-events-none">
+              
+              {/* Head (Reused from RoomTwo) */}
+              <div className="relative w-28 h-32 bg-shade-70 rounded-[40%] flex flex-col items-center shadow-[inset_0_-10px_20px_rgba(0,0,0,0.5)] z-20">
+                {/* Hair */}
+                <div className="absolute -top-2 w-32 h-10 bg-mono-950 rounded-t-full rounded-b-[50%]" />
+                {/* Ears */}
+                <div className="absolute top-12 -left-2 w-4 h-6 bg-shade-71 rounded-l-full" />
+                {/* Brows */}
+                <div className="absolute top-10 left-6 w-6 h-1.5 bg-mono-950 rounded-full rotate-[15deg]" />
+                <div className="absolute top-10 right-4 w-6 h-1.5 bg-mono-950 rounded-full" />
+                {/* Eyes (Looking right towards phone) */}
+                <div className={`absolute top-14 left-6 w-5 h-2.5 bg-white rounded-full flex items-center justify-end pr-1 overflow-hidden border-t-2 border-shade-16 shadow-inner ${prefersReducedMotion ? "" : "animate-blink"}`}>
+                   <div className="w-2.5 h-2.5 bg-shade-17 rounded-full" />
+                </div>
+                <div className={`absolute top-14 right-4 w-5 h-2.5 bg-white rounded-full flex items-center justify-end pr-1 overflow-hidden border-t-2 border-shade-16 shadow-inner ${prefersReducedMotion ? "" : "animate-blink"}`}>
+                   <div className="w-2.5 h-2.5 bg-shade-17 rounded-full" />
+                </div>
+                {/* Nose */}
+                <div className="absolute top-16 right-10 w-4 h-8 bg-black/10 rounded-full border-b border-r border-black/20" />
+                {/* Goatee / Beard */}
+                <div className="absolute bottom-2 right-4 w-12 h-8 bg-mono-950 rounded-b-full rounded-t-sm opacity-95 flex flex-col items-center justify-start pt-1">
+                   {/* Lips */}
+                   <div className="w-7 h-2 bg-shade-72 rounded-full mb-1 translate-x-1" />
+                </div>
+                {/* Glasses */}
+                <div className="absolute top-13 left-5 w-7 h-5 border border-white/20 rounded-md" />
+                <div className="absolute top-13 right-3 w-7 h-5 border border-white/20 rounded-md" />
+                <div className="absolute top-14 right-11 w-3 h-0.5 bg-white/20" />
+              </div>
+
+              {/* Torso / Suit (Standing) */}
+              <div className={`relative w-40 h-64 flex flex-col items-center -mt-4 z-10 ${prefersReducedMotion ? "" : "animate-breathe"}`}>
+                {/* Shoulders / Body */}
+                <div className="absolute top-0 w-full h-full bg-mono-925 rounded-t-[3rem] rounded-b-sm shadow-[inset_-10px_0_30px_rgba(0,0,0,0.8)]" />
+                {/* White Shirt Collar */}
+                <div className="absolute top-0 w-16 h-12 bg-white rounded-b-sm border-b-2 border-gray-300 flex justify-center" style={{ clipPath: 'polygon(0 0, 100% 0, 50% 100%)' }}>
+                   {/* Tie */}
+                   <div className="w-4 h-full bg-shade-73 shadow-md translate-x-1" />
+                </div>
+                {/* Suit Lapels */}
+                <div className="absolute top-0 left-[35%] w-6 h-32 bg-mono-950 border-r border-black/40 rotate-12 shadow-xl" />
+                <div className="absolute top-0 right-[25%] w-6 h-32 bg-mono-950 border-l border-black/40 -rotate-12 shadow-xl" />
+                
+                {/* Left Arm (Relaxed) */}
+                <div className="absolute top-6 -left-5 w-12 h-48 bg-mono-925 rounded-l-3xl origin-top rotate-6 shadow-lg z-0 flex flex-col justify-end items-center pb-2">
+                   {/* Hand */}
+                   <div className="w-6 h-8 bg-shade-71 rounded-full shadow-inner" />
+                </div>
+                
+                {/* Right Arm (Raised slightly towards phone) */}
+                <div className="absolute top-6 -right-6 w-12 h-28 bg-mono-925 rounded-t-3xl origin-top -rotate-[30deg] shadow-[5px_5px_15px_rgba(0,0,0,0.5)] z-20 flex flex-col justify-end items-center">
+                   {/* Forearm bent */}
+                   <div className="absolute bottom-2 left-2 w-12 h-24 bg-mono-925 origin-bottom rotate-[60deg] rounded-b-3xl shadow-md flex flex-col justify-start items-center pt-2">
+                      {/* Hand reaching out */}
+                      <div className="w-6 h-8 bg-shade-71 rounded-full shadow-inner -translate-y-5" />
+                   </div>
+                </div>
+              </div>
+              
+              {/* Legs */}
+              <div className="relative w-32 h-40 flex justify-between px-3 -mt-2 z-0">
+                 <div className="w-12 h-full bg-mono-950 border-r border-black/50 shadow-inner" />
+                 <div className="w-12 h-full bg-mono-950 border-l border-black/50 shadow-inner" />
+              </div>
+              
+              {/* Shoes */}
+              <div className="relative w-36 h-6 flex justify-between -mt-1 z-10">
+                 <div className="w-14 h-full bg-black rounded-t-xl rounded-l-sm shadow-md" />
+                 <div className="w-14 h-full bg-black rounded-t-xl rounded-r-sm shadow-md" />
+              </div>
+              
+              {/* Contact Shadow */}
+              <div className="absolute -bottom-2 w-48 h-6 bg-black/60 blur-md rounded-[50%] z-0" />
+            </div>
+
             {/* The Wall Payphone (Contact Us) */}
-            <div className="absolute top-48 md:top-56 left-4 md:left-24 pointer-events-auto scale-75 md:scale-100 origin-left z-20 touch-manipulation">
+            <div className="absolute top-48 md:top-56 left-24 md:left-40 pointer-events-auto scale-75 md:scale-100 origin-left z-20 touch-manipulation">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -369,6 +446,11 @@ export default function OfficeRoom() {
                <div className="w-[96%] h-[80%] mt-2 border border-terracotta-dark/40 rounded-sm flex items-center justify-center bg-shade-10/30 relative">
                   <div className="w-2/3 h-2/3 border border-terracotta-dark/20 rounded-full flex items-center justify-center">
                      <div className="w-4 h-4 bg-terracotta-dark/20 rotate-45" />
+                  </div>
+                  
+                  {/* Steaming Mug */}
+                  <div className="absolute bottom-6 md:bottom-8 left-8 md:left-24 scale-75 md:scale-90 z-10 pointer-events-none">
+                     <TeaSteam />
                   </div>
                   
                   {/* Classic Office Phone */}
