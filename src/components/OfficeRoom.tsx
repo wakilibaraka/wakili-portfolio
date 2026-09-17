@@ -9,6 +9,7 @@ import CustomCursor from "./CustomCursor";
 import PaintingModal from "./PaintingModal";
 import BookshelfModal from "./BookshelfModal";
 import AboutModal from "./AboutModal";
+import ContactModal from "./ContactModal";
 import { useTelephoneRing } from "../hooks/useTelephoneRing";
 import SimuYaJamiiModal from "./SimuYaJamiiModal";
 
@@ -21,6 +22,7 @@ export default function OfficeRoom() {
   const [isPhonePickedUp, setIsPhonePickedUp] = useState(false);
   const { playPickUpClack } = useTelephoneRing();
   const [isBookshelfOpen, setIsBookshelfOpen] = useState(false);
+  const [isDeskPhoneOpen, setIsDeskPhoneOpen] = useState(false);
   const [hasGyroscope, setHasGyroscope] = useState(false);
   const [interactionMode, setInteractionMode] = useState<"mouse" | "gyro" | "touch">("mouse");
   const [isNightMode, setIsNightMode] = useState(false);
@@ -377,7 +379,20 @@ export default function OfficeRoom() {
                   </div>
                   
                   {/* Classic Office Phone */}
-                  <div className="absolute bottom-4 right-8 md:right-16 w-12 md:w-16 h-8 md:h-10 bg-mono-900 rounded shadow-lg border-t-2 border-mono-800 flex flex-col items-center justify-center rotate-[15deg] pointer-events-auto cursor-pointer hover:-translate-y-1 hover:shadow-2xl transition-all">
+                  <div 
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Quick Contact"
+                    onClick={() => { playPickUpClack(); setIsDeskPhoneOpen(true); }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        playPickUpClack();
+                        setIsDeskPhoneOpen(true);
+                      }
+                    }}
+                    className="absolute bottom-10 right-6 md:bottom-4 md:right-16 w-12 md:w-16 h-8 md:h-10 bg-mono-900 rounded shadow-lg border-t-2 border-mono-800 flex flex-col items-center justify-center rotate-[15deg] pointer-events-auto cursor-pointer hover:-translate-y-1 hover:shadow-2xl transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-brass touch-manipulation"
+                  >
                      <div className="w-10 md:w-14 h-3 bg-mono-850 rounded-full border border-black -translate-y-2 flex justify-between px-1 shadow-inner">
                         <div className="w-3 h-full bg-mono-900 rounded-full" />
                         <div className="w-3 h-full bg-mono-900 rounded-full" />
@@ -487,6 +502,7 @@ export default function OfficeRoom() {
       <PaintingModal isOpen={isPaintingOpen} onClose={() => { setIsPaintingOpen(false); setIsPhonePickedUp(false); }} />
       <BookshelfModal isOpen={isBookshelfOpen} onClose={() => setIsBookshelfOpen(false)} />
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
+      <ContactModal isOpen={isDeskPhoneOpen} onClose={() => setIsDeskPhoneOpen(false)} />
       <SimuYaJamiiModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
       
       {/* Custom Cursor (Rendered last to stay on top of everything) */}

@@ -1,55 +1,44 @@
+import re
+
 with open("src/components/OfficeRoom.tsx", "r") as f:
     content = f.read()
 
-# Imports
-content = content.replace('import AboutModal from "./AboutModal";', 'import AboutModal from "./AboutModal";\nimport { useTelephoneRing } from "../hooks/useTelephoneRing";')
+# 1. Imports
+content = content.replace(
+    'import AboutModal from "./AboutModal";',
+    'import AboutModal from "./AboutModal";\nimport ContactModal from "./ContactModal";'
+)
 
-# State
-state_block = '  const [isBookingOpen, setIsBookingOpen] = useState(false);'
-new_state = '  const [isBookingOpen, setIsBookingOpen] = useState(false);\n  const [isPhonePickedUp, setIsPhonePickedUp] = useState(false);\n  const { playPickUpClack } = useTelephoneRing();'
-content = content.replace(state_block, new_state)
+# 2. State
+content = content.replace(
+    'const [isBookshelfOpen, setIsBookshelfOpen] = useState(false);',
+    'const [isBookshelfOpen, setIsBookshelfOpen] = useState(false);\n  const [isDeskPhoneOpen, setIsDeskPhoneOpen] = useState(false);'
+)
 
-# Handset pick-up logic
-old_payphone = """                 {/* The Handset (Hanging on the left) */}
-                 <div className="absolute top-2 -left-3 w-4 h-12 flex flex-col justify-between items-center rotate-[-10deg] group-hover:rotate-[-20deg] transition-transform z-20 pointer-events-none">"""
-new_payphone = """                 {/* The Handset */}
-                 <div className={`absolute top-2 -left-3 w-4 h-12 flex flex-col justify-between items-center transition-all duration-300 z-20 pointer-events-none ${
-                   isPhonePickedUp ? "-translate-x-6 -translate-y-4 rotate-[-60deg]" : "rotate-[-10deg] group-hover:rotate-[-20deg]"
-                 }`}>"""
-content = content.replace(old_payphone, new_payphone)
+# 3. Desk Phone JSX
+old_phone = '                  {/* Classic Office Phone */}\n                  <div className="absolute bottom-4 right-8 md:right-16 w-12 md:w-16 h-8 md:h-10 bg-mono-900 rounded shadow-lg border-t-2 border-mono-800 flex flex-col items-center justify-center rotate-[15deg] pointer-events-auto cursor-pointer hover:-translate-y-1 hover:shadow-2xl transition-all">'
+new_phone = '''                  {/* Classic Office Phone */}
+                  <div 
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Quick Contact"
+                    onClick={() => { playPickUpClack(); setIsDeskPhoneOpen(true); }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        playPickUpClack();
+                        setIsDeskPhoneOpen(true);
+                      }
+                    }}
+                    className="absolute bottom-10 right-6 md:bottom-4 md:right-16 w-12 md:w-16 h-8 md:h-10 bg-mono-900 rounded shadow-lg border-t-2 border-mono-800 flex flex-col items-center justify-center rotate-[15deg] pointer-events-auto cursor-pointer hover:-translate-y-1 hover:shadow-2xl transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-brass touch-manipulation"
+                  >'''
+content = content.replace(old_phone, new_phone)
 
-# Wrapper to apply animate-ring if not picked up
-old_wrapper = """            {/* The Wall Payphone (Contact Us) */}
-            <div className="absolute top-48 md:top-56 left-4 md:left-24 pointer-events-auto scale-75 md:scale-100 origin-left z-20">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsPaintingOpen(true)}
-                className="group cursor-pointer relative"
-              >"""
-new_wrapper = """            {/* The Wall Payphone (Contact Us) */}
-            <div className="absolute top-48 md:top-56 left-4 md:left-24 pointer-events-auto scale-75 md:scale-100 origin-left z-20 touch-manipulation">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  playPickUpClack();
-                  setIsPhonePickedUp(true);
-                  setTimeout(() => setIsPaintingOpen(true), 300);
-                }}
-                className={`group cursor-pointer relative ${!isPhonePickedUp ? "animate-telephone-ring" : ""}`}
-              >"""
-content = content.replace(old_wrapper, new_wrapper)
-
-# Handle modal close to put phone back
-old_modal = '<PaintingModal isOpen={isPaintingOpen} onClose={() => setIsPaintingOpen(false)} />'
-new_modal = '<PaintingModal isOpen={isPaintingOpen} onClose={() => { setIsPaintingOpen(false); setIsPhonePickedUp(false); }} />'
-content = content.replace(old_modal, new_modal)
-
-# Touch optimization on bulb and light switch
-content = content.replace('className="absolute top-48 md:top-64 right-40 md:right-[350px] pointer-events-auto scale-75 md:scale-100 origin-right"', 'className="absolute top-48 md:top-64 right-40 md:right-[350px] pointer-events-auto scale-75 md:scale-100 origin-right touch-manipulation"')
-content = content.replace('className="absolute top-0 right-12 md:right-32 flex flex-col items-center group pointer-events-auto cursor-pointer origin-top hover:rotate-6 transition-transform duration-700 ease-in-out z-50 animate-swing"', 'className="absolute top-0 right-12 md:right-32 flex flex-col items-center group pointer-events-auto cursor-pointer origin-top hover:rotate-6 transition-transform duration-700 ease-in-out z-50 animate-swing touch-manipulation"')
-content = content.replace('className="absolute bottom-16 md:bottom-28 right-4 md:right-24 preserve-3d"', 'className="absolute bottom-16 md:bottom-28 right-4 md:right-24 preserve-3d touch-manipulation"')
+# 4. Inject Modal
+content = content.replace(
+    '<AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />',
+    '<AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />\n      <ContactModal isOpen={isDeskPhoneOpen} onClose={() => setIsDeskPhoneOpen(false)} />'
+)
 
 with open("src/components/OfficeRoom.tsx", "w") as f:
     f.write(content)
