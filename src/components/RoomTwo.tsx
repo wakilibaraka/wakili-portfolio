@@ -252,10 +252,10 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
           <div className="flex flex-col items-end gap-6 z-10 -mt-6 mr-2 md:mr-12 hidden sm:flex">
              
              {/* Desk Name Plate */}
-             <div className="w-40 h-12 bg-gradient-to-b from-mono-950 to-shade-20 rounded-sm border-2 border-accent-brass shadow-[0_10px_20px_rgba(0,0,0,0.6)] flex flex-col items-center justify-center p-1 transform rotate-[-5deg]">
-                <p className="text-accent-brass font-serif font-bold text-[10px] tracking-widest">EMMANUEL BARAKA</p>
-                <div className="w-32 h-[1px] bg-accent-brass/40 my-0.5" />
-                <p className="text-accent-gold/70 text-[7px] tracking-[0.2em] uppercase">Advocate, High Court</p>
+             <div className="w-48 h-12 bg-gradient-to-b from-mono-950 to-shade-20 rounded-sm border-2 border-accent-brass shadow-[0_10px_20px_rgba(0,0,0,0.6)] flex flex-col items-center justify-center p-1 transform rotate-[-5deg]">
+                <p className="text-accent-brass font-serif font-bold text-[9px] tracking-widest">EMMANUEL BARAKA</p>
+                <div className="w-40 h-[1px] bg-accent-brass/40 my-0.5" />
+                <p className="text-accent-gold/70 text-[5px] tracking-[0.1em] uppercase">© {new Date().getFullYear()} Emmanuel Baraka • wakili.barakalines.com</p>
              </div>
 
              {/* Stack of Leather Treatises */}
