@@ -294,12 +294,17 @@ export default function OfficeRoom() {
                    <div className="w-6 h-8 bg-shade-71 rounded-full shadow-inner" />
                 </div>
                 
-                {/* Right Arm (Raised slightly towards phone) */}
+                {/* Right Arm (Raised holding cup) */}
                 <div className="absolute top-6 -right-6 w-12 h-28 bg-mono-925 rounded-t-3xl origin-top -rotate-[30deg] shadow-[5px_5px_15px_rgba(0,0,0,0.5)] z-20 flex flex-col justify-end items-center">
                    {/* Forearm bent */}
                    <div className="absolute bottom-2 left-2 w-12 h-24 bg-mono-925 origin-bottom rotate-[60deg] rounded-b-3xl shadow-md flex flex-col justify-start items-center pt-2">
                       {/* Hand reaching out */}
-                      <div className="w-6 h-8 bg-shade-71 rounded-full shadow-inner -translate-y-5" />
+                      <div className="relative w-6 h-8 bg-shade-71 rounded-full shadow-inner -translate-y-5">
+                         {/* Mug in hand (Counter-rotate by -30deg to stay upright: -30 upper + 60 forearm = 30 net) */}
+                         <div className="absolute -top-12 -left-2 rotate-[-30deg] scale-[1.2] z-10">
+                            <TeaSteam />
+                         </div>
+                      </div>
                    </div>
                 </div>
               </div>
@@ -448,10 +453,7 @@ export default function OfficeRoom() {
                      <div className="w-4 h-4 bg-terracotta-dark/20 rotate-45" />
                   </div>
                   
-                  {/* Steaming Mug */}
-                  <div className="absolute bottom-6 md:bottom-8 left-8 md:left-24 scale-75 md:scale-90 z-10 pointer-events-none">
-                     <TeaSteam />
-                  </div>
+
                   
                   {/* Classic Office Phone */}
                   <div 
