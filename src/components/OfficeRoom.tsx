@@ -213,6 +213,7 @@ export default function OfficeRoom() {
             <div className="absolute bottom-[240px] md:bottom-[380px] right-4 md:right-24 w-32 md:w-56 flex justify-center z-20 pointer-events-auto">
                <motion.button 
                  onClick={() => setIsBookingOpen(true)}
+               onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setIsBookingOpen(true); } }}
                  whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(212,175,55,0.6)" }}
                  whileTap={{ scale: 0.95 }}
                  className="w-24 md:w-40 h-10 md:h-12 bg-gradient-to-b from-shade-29 via-shade-30 to-shade-31 border-2 border-accent-gold/50 rounded-sm shadow-[0_10px_20px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.4)] flex flex-col items-center justify-center relative overflow-hidden group cursor-pointer"
@@ -280,7 +281,7 @@ export default function OfficeRoom() {
                  </div>
                  {/* The Handset */}
                  <div className={`absolute top-2 -left-3 w-4 h-12 flex flex-col justify-between items-center transition-all duration-300 z-20 pointer-events-none ${
-                   isPhonePickedUp ? "-translate-x-6 -translate-y-4 rotate-[-60deg]" : "rotate-[-10deg] group-hover:rotate-[-20deg]"
+                   isPhonePickedUp ? "-translate-x-6 -translate-y-4 rotate-[-60deg]" : "rotate-[-10deg] group-hover:rotate-[-20deg]" + " group-active:-translate-x-2 group-active:-translate-y-2 group-active:rotate-[-30deg]"
                  }`}>
                     {/* Earpiece */}
                     <div className="w-4 h-4 bg-mono-900 rounded-full border border-mono-850" />
@@ -307,8 +308,8 @@ export default function OfficeRoom() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={toggleNightMode}
-                className={`w-8 h-12 rounded border-2 shadow-[2px_4px_12px_rgba(0,0,0,0.6)] flex flex-col items-center justify-center relative cursor-pointer transition-colors duration-1000 ${
+                role="button" tabIndex={0} aria-label="Toggle Night Mode" onClick={() => { toggleNightMode(); }} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleNightMode(); } }}
+                className={`w-8 h-12 rounded border-2 shadow-[2px_4px_12px_rgba(0,0,0,0.6)] flex flex-col items-center justify-center relative cursor-pointer transition-colors duration-1000 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-brass active:scale-95 group ${
                   isNightMode ? "bg-switch-night-bg border-switch-night-border" : "bg-switch-day-bg border-switch-day-border"
                 }`}
               >
@@ -318,6 +319,7 @@ export default function OfficeRoom() {
                 
                 {/* The Toggle */}
                 <div className={`w-3 h-5 rounded-sm bg-gradient-to-b shadow-md transition-all duration-150 ${
+                  "group-active:scale-y-95 group-active:brightness-90 " +
                   isNightMode 
                     ? "from-white to-shade-5 translate-y-1.5 shadow-[0_-2px_4px_rgba(0,0,0,0.3)]" 
                     : "from-shade-5 to-white -translate-y-1.5 shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
@@ -391,9 +393,9 @@ export default function OfficeRoom() {
                         setIsDeskPhoneOpen(true);
                       }
                     }}
-                    className="absolute bottom-10 right-6 md:bottom-4 md:right-16 w-12 md:w-16 h-8 md:h-10 bg-mono-900 rounded shadow-lg border-t-2 border-mono-800 flex flex-col items-center justify-center rotate-[15deg] pointer-events-auto cursor-pointer hover:-translate-y-1 hover:shadow-2xl transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-brass touch-manipulation"
+                    className="absolute bottom-10 right-6 md:bottom-4 md:right-16 w-12 md:w-16 h-8 md:h-10 bg-mono-900 rounded shadow-lg border-t-2 border-mono-800 flex flex-col items-center justify-center rotate-[15deg] pointer-events-auto cursor-pointer hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(212,175,55,0.2)] transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-brass touch-manipulation group active:scale-95"
                   >
-                     <div className="w-10 md:w-14 h-3 bg-mono-850 rounded-full border border-black -translate-y-2 flex justify-between px-1 shadow-inner">
+                     <div className="w-10 md:w-14 h-3 bg-mono-850 rounded-full border border-black -translate-y-2 flex justify-between px-1 shadow-inner transition-transform group-hover:-translate-y-3 group-hover:rotate-[-5deg] group-active:-translate-y-4 group-active:rotate-[-10deg]">
                         <div className="w-3 h-full bg-mono-900 rounded-full" />
                         <div className="w-3 h-full bg-mono-900 rounded-full" />
                      </div>
@@ -448,7 +450,8 @@ export default function OfficeRoom() {
       <div className={`absolute inset-0 pointer-events-none z-40 transition-opacity duration-1000 ${isNightMode ? 'bg-[radial-gradient(circle_at_80%_10%,transparent_10%,var(--color-black)_140%)] opacity-80' : 'bg-[radial-gradient(circle_at_80%_10%,transparent_20%,var(--color-wood-mahogany)_180%)] opacity-30'}`} />
 
         {/* Top-Right Hanging Bulb Indicator */}
-        <motion.div style={{ y: bulbScrollY, opacity: bulbOpacity }} onClick={() => setIsAboutOpen(true)} className={`absolute top-0 right-12 md:right-32 flex flex-col items-center group pointer-events-auto cursor-pointer origin-top hover:rotate-6 transition-transform duration-700 ease-in-out z-50 ${prefersReducedMotion ? "" : "animate-swing"} touch-manipulation focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-brass focus-visible:ring-offset-8 focus-visible:ring-offset-transparent rounded-full before:absolute before:-inset-6 before:content-[\'\']`}>
+        <motion.div style={{ y: bulbScrollY, opacity: bulbOpacity }} role="button" tabIndex={0} aria-label="About Emmanuel Baraka" onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setIsAboutOpen(true); } }} onClick={() => setIsAboutOpen(true)} className={`absolute top-0 right-12 md:right-32 flex flex-col items-center group pointer-events-auto cursor-pointer origin-top hover:rotate-6 transition-transform duration-700 ease-in-out z-50 ${prefersReducedMotion ? "" : "animate-swing"} touch-manipulation active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-brass focus-visible:ring-offset-8 focus-visible:ring-offset-transparent rounded-full before:absolute before:-inset-6 before:content-[\'\']`}>
+          <div className={`flex flex-col items-center transition-all duration-300 ${prefersReducedMotion ? "" : "group-hover:translate-y-1 group-active:translate-y-4"}`}>
           {/* The Cord */}
           <div className="w-[2px] h-16 md:h-24 bg-mono-900 shadow-[1px_0_0_rgba(255,255,255,0.1)]" />
           {/* The Bulb Base */}
@@ -457,12 +460,13 @@ export default function OfficeRoom() {
           <div className={`w-8 h-8 rounded-full flex items-center justify-center -mt-1 transition-all duration-1000 ${
             isNightMode 
               ? "bg-shade-48 shadow-[0_0_50px_rgba(255,170,0,0.8),inset_0_0_10px_rgba(255,255,255,0.8)]"
-              : "bg-white/10 shadow-[inset_0_0_5px_rgba(255,255,255,0.2)] border border-white/20 backdrop-blur-sm"
+              : "bg-white/10 shadow-[inset_0_0_5px_rgba(255,255,255,0.2)] border border-white/20 backdrop-blur-sm" + " group-hover:shadow-[0_0_30px_rgba(212,175,55,0.6)] group-active:brightness-150"
           }`}>
             {/* Inner filament */}
             <div className={`w-3 h-3 border border-x-transparent border-t-transparent rounded-b-full transition-colors duration-1000 ${
               isNightMode ? "border-b-white shadow-[0_0_5px_white]" : "border-b-white/40"
             }`} />
+          </div>
           </div>
         </motion.div>
 
