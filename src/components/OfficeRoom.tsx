@@ -167,13 +167,9 @@ export default function OfficeRoom() {
   };
 
   return (
-    <div className={`relative w-full h-[250vh] transition-colors duration-1000 ${isNightMode ? "bg-shade-1" : "bg-shade-2"}`}>
+    <div className="relative w-full h-[250vh] bg-green-racing-deep">
       <div
-        className={`fixed inset-0 w-full h-screen overflow-hidden perspective-stage flex items-center justify-center cursor-none transition-colors duration-1000 ${
-          isNightMode 
-            ? "bg-gradient-to-b from-shade-25 via-shade-26 to-shade-1" 
-            : "bg-gradient-to-b from-green-racing-deep via-green-racing to-shade-2"
-        }`}
+        className="fixed inset-0 w-full h-screen overflow-hidden perspective-stage flex items-center justify-center cursor-none bg-green-racing-deep"
         onMouseMove={handleMouseMove}
         onTouchMove={handleTouchMove}
       >
@@ -197,10 +193,10 @@ export default function OfficeRoom() {
         {/* ========================================================= */}
         <motion.div
           style={{ x: bgShiftX, y: bgShiftY }}
-          className={`absolute inset-0 preserve-3d flex items-center justify-center [transform:translateZ(-120px)] after:absolute after:inset-0 after:pointer-events-none transition-colors duration-1000 ${isNightMode ? "after:bg-[linear-gradient(to_bottom,var(--color-night-sky-deep),transparent)] after:opacity-70" : "after:bg-[linear-gradient(to_bottom,var(--color-paper-dim),transparent)] after:opacity-40"}`}
+          className="absolute inset-0 preserve-3d flex items-center justify-center [transform:translateZ(-120px)]"
         >
           {/* Main Wall Surface */}
-          <div className={`relative w-[92%] h-[88%] rounded-3xl border-4 border-wood-mahogany shadow-2xl overflow-hidden transition-colors duration-1000 ${isNightMode ? "bg-shade-27" : "bg-green-racing"}`}>
+          <div className={`relative w-[92%] h-[88%] rounded-3xl border-4 border-wood-mahogany shadow-2xl overflow-hidden transition-colors duration-1000 ${isNightMode ? "bg-green-racing-deep" : "bg-green-racing"}`}>
             {/* Victorian Wainscoting Molding Lines */}
             <div className={`absolute bottom-0 left-0 right-0 h-40 border-t-4 border-accent-brass/40 flex gap-4 px-6 pt-3 transition-colors duration-1000 ${isNightMode ? "bg-wood-night" : "bg-wood-dark"}`}>
               {[...Array(6)].map((_, i) => (
@@ -447,7 +443,7 @@ export default function OfficeRoom() {
         
         
       {/* VIGNETTE & RADIAL BULB GLOW */}
-      <div className={`absolute inset-0 pointer-events-none z-40 transition-opacity duration-1000 ${isNightMode ? 'bg-[radial-gradient(circle_at_80%_10%,transparent_10%,var(--color-black)_140%)] opacity-80' : 'bg-[radial-gradient(circle_at_80%_10%,transparent_20%,var(--color-wood-mahogany)_180%)] opacity-30'}`} />
+      <div className={`absolute inset-0 pointer-events-none z-40 transition-opacity duration-1000 bg-[radial-gradient(circle_at_50%_50%,transparent_50%,var(--color-green-racing-deep)_120%)] ${isNightMode ? "opacity-80" : "opacity-40"}`} />
 
         {/* Top-Right Hanging Bulb Indicator */}
         <motion.div style={{ y: bulbScrollY, opacity: bulbOpacity }} role="button" tabIndex={0} aria-label="About Emmanuel Baraka" onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setIsAboutOpen(true); } }} onClick={() => setIsAboutOpen(true)} className={`absolute top-0 right-12 md:right-32 flex flex-col items-center group pointer-events-auto cursor-pointer origin-top hover:rotate-6 transition-transform duration-700 ease-in-out z-50 ${prefersReducedMotion ? "" : "animate-swing"} touch-manipulation active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-brass focus-visible:ring-offset-8 focus-visible:ring-offset-transparent rounded-full before:absolute before:-inset-6 before:content-[\'\']`}>

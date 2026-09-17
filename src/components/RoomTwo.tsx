@@ -58,9 +58,7 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
       <div className="absolute inset-0 preserve-3d flex items-center justify-center [transform:translateZ(-100px)] pointer-events-none">
         
         {/* Flat Evenly Green Back Wall */}
-        <div className={`absolute w-[95%] h-[95%] rounded-2xl border-4 shadow-2xl transition-colors duration-1000 flex items-center justify-center overflow-hidden ${
-          isNightMode ? "bg-shade-60 border-shade-61" : "bg-green-racing border-wood-dark"
-        }`}>
+        <div className={`absolute w-[95%] h-[95%] rounded-2xl border-4 shadow-2xl transition-colors duration-1000 flex items-center justify-center overflow-hidden ${isNightMode ? "bg-green-racing-deep border-shade-61" : "bg-green-racing border-wood-dark"}`}>
           
           {/* Left: The Grand Bookshelf (Writings Hotspot) */}
           <motion.div 
