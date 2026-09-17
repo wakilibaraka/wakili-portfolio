@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
+import { useReducedMotion } from "framer-motion";
 
 export default function TeaSteam() {
+  const prefersReducedMotion = useReducedMotion();
   return (
     <div className="relative w-12 h-14 flex flex-col items-center justify-end">
       {/* Steam Wisps */}
@@ -14,7 +16,7 @@ export default function TeaSteam() {
             stroke="rgba(255, 255, 255, 0.45)"
             strokeWidth="2.5"
             strokeLinecap="round"
-            className="steam-wisp-1 filter blur-[1px]"
+            className={`${prefersReducedMotion ? "opacity-0" : "steam-wisp-1"} filter blur-[1px]`}
           />
           <path
             d="M23 42 Q 27 30 20 20 T 24 4"
@@ -22,7 +24,7 @@ export default function TeaSteam() {
             stroke="rgba(255, 240, 220, 0.4)"
             strokeWidth="2.2"
             strokeLinecap="round"
-            className="steam-wisp-2 filter blur-[1px]"
+            className={`${prefersReducedMotion ? "opacity-0" : "steam-wisp-2"} filter blur-[1px]`}
           />
           <path
             d="M14 41 Q 12 32 16 22 T 13 6"
@@ -30,7 +32,7 @@ export default function TeaSteam() {
             stroke="rgba(255, 255, 255, 0.35)"
             strokeWidth="2"
             strokeLinecap="round"
-            className="steam-wisp-3 filter blur-[1px]"
+            className={`${prefersReducedMotion ? "opacity-0" : "steam-wisp-3"} filter blur-[1px]`}
           />
         </svg>
       </div>
@@ -38,14 +40,14 @@ export default function TeaSteam() {
       {/* Terracotta Ceramic Cup */}
       <div className="relative z-10 flex flex-col items-center">
         {/* Cup rim */}
-        <div className="w-9 h-2.5 rounded-full bg-[#df8061] border border-[#f5b39b] shadow-inner" />
+        <div className="w-9 h-2.5 rounded-full bg-shade-80 border border-shade-81 shadow-inner" />
         {/* Cup body */}
-        <div className="w-8 h-7 bg-gradient-to-b from-[#c25e3e] to-[#9b4124] rounded-b-xl shadow-md relative">
+        <div className="w-8 h-7 bg-gradient-to-b from-accent-terracotta to-shade-82 rounded-b-xl shadow-md relative">
           {/* Handle */}
-          <div className="absolute right-[-6px] top-1.5 w-3 h-4 border-2 border-[#c25e3e] rounded-r-full" />
+          <div className="absolute right-[-6px] top-1.5 w-3 h-4 border-2 border-accent-terracotta rounded-r-full" />
         </div>
         {/* Saucer */}
-        <div className="w-11 h-1.5 rounded-full bg-[#8c381e] shadow-sm -mt-0.5" />
+        <div className="w-11 h-1.5 rounded-full bg-shade-83 shadow-sm -mt-0.5" />
       </div>
     </div>
   );

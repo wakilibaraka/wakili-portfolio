@@ -1,54 +1,60 @@
 import re
 
-with open("src/components/OfficeRoom.tsx", "r") as f:
+with open('src/components/OfficeRoom.tsx', 'r') as f:
     content = f.read()
 
-# 1. Add imports
-content = content.replace(
-    'import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";',
-    'import { motion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion";\nimport RoomTwo from "./RoomTwo";'
-)
+# Add state and effect for scaling
+scale_code = """  const [isNightMode, setIsNightMode] = useState(false);
+  const [stageScale, setStageScale] = useState(1);
 
-# 2. Add useScroll hooks right after isNightMode state
-scroll_hooks = """
-  // Multi-Room Scroll Logic
-  const { scrollYProgress } = useScroll();
-  const scrollRoom1RotateX = useTransform(scrollYProgress, [0, 1], [0, 90]);
-  const scrollRoom1Z = useTransform(scrollYProgress, [0, 1], [0, -500]);
-  const scrollRoom1Opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
-  
-  const scrollRoom2RotateX = useTransform(scrollYProgress, [0, 1], [-90, 0]);
-  const scrollRoom2Z = useTransform(scrollYProgress, [0, 1], [-500, 0]);
-  const scrollRoom2Opacity = useTransform(scrollYProgress, [0.6, 1], [0, 1]);
-"""
-content = content.replace('const [isNightMode, setIsNightMode] = useState(false);', 'const [isNightMode, setIsNightMode] = useState(false);\n' + scroll_hooks)
+  // Responsive stage scaling (Pass 1.1)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const updateScale = () => {
+      const width = window.innerWidth;
+      // clamp(minScale, viewportWidth / 896, maxScale)
+      // 896px is max-w-4xl which is the design width of the stage
+      const scale = Math.max(0.3, Math.min(width / 896, 1.4));
+      setStageScale(scale);
+    };
 
-# 3. Replace the return statement structure
-old_return = """  return (
-    <div
-      className={`relative w-full h-screen overflow-hidden perspective-stage flex items-center justify-center cursor-default transition-colors duration-1000 ${
-        isNightMode 
-          ? "bg-gradient-to-b from-[#050a07] via-[#08120e] to-[#030604]" 
-          : "bg-gradient-to-b from-[#0e2018] via-[#163024] to-[#09150f]"
-      }`}
-      onMouseMove={handleMouseMove}
-      onTouchMove={handleTouchMove}
-    >
-      {/* 2.5D Room Isometric Rig */}
-      <motion.div
-        style={{
-          rotateX,
-          rotateY,
-          x: panX,
-          y: panY,
-        }}
-        className="relative w-full max-w-4xl h-[620px] md:h-[680px] preserve-3d flex items-center justify-center select-none"
+    updateScale();
+    
+    let ticking = false;
+    const handleResize = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateScale();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, []);"""
+
+content = content.replace('  const [isNightMode, setIsNightMode] = useState(false);', scale_code)
+
+# Update the main wrapper
+old_wrapper = """      <div
+        className={`fixed inset-0 w-full h-screen overflow-hidden perspective-stage flex items-center justify-center cursor-none transition-colors duration-1000 ${
+          isNightMode 
+            ? "bg-gradient-to-b from-[#050a07] via-[#08120e] to-[#030604]" 
+            : "bg-gradient-to-b from-[#0e2018] via-[#163024] to-[#09150f]"
+        }`}
+        onMouseMove={handleMouseMove}
+        onTouchMove={handleTouchMove}
       >"""
 
-new_return = """  return (
-    <div className={`relative w-full h-[250vh] transition-colors duration-1000 ${isNightMode ? "bg-[#030604]" : "bg-[#09150f]"}`}>
-      <div
-        className={`fixed inset-0 w-full h-screen overflow-hidden perspective-stage flex items-center justify-center cursor-default transition-colors duration-1000 ${
+new_wrapper = """      <div
+        className={`fixed inset-0 w-full h-screen overflow-x-clip flex items-center justify-center cursor-none transition-colors duration-1000 ${
           isNightMode 
             ? "bg-gradient-to-b from-[#050a07] via-[#08120e] to-[#030604]" 
             : "bg-gradient-to-b from-[#0e2018] via-[#163024] to-[#09150f]"
@@ -56,56 +62,38 @@ new_return = """  return (
         onMouseMove={handleMouseMove}
         onTouchMove={handleTouchMove}
       >
-        {/* ROOM 1: Landing Viewport */}
-        <motion.div
-          style={{ rotateX: scrollRoom1RotateX, z: scrollRoom1Z, opacity: scrollRoom1Opacity }}
-          className="absolute inset-0 preserve-3d flex items-center justify-center"
-        >
-          {/* 2.5D Room Isometric Rig */}
-          <motion.div
-            style={{
-              rotateX,
-              rotateY,
-              x: panX,
-              y: panY,
-            }}
-            className="relative w-full max-w-4xl h-[620px] md:h-[680px] preserve-3d flex items-center justify-center select-none"
-          >"""
-content = content.replace(old_return, new_return)
+        <div 
+          className="w-full h-full perspective-stage flex items-center justify-center"
+          style={{
+            transform: `scale(${stageScale})`,
+            transformOrigin: "center center"
+          }}
+        >"""
 
-# 4. Insert Room Two before the HUD
-old_hud_start = """      {/* ========================================================= */}
-      {/* LAYER 4: Interface HUD / Header Overlay (z: +150px)       */}
+content = content.replace(old_wrapper, new_wrapper)
+
+# Note: Because we added a div wrapper, we need to add a closing div at the end.
+# Let's find the closing tag for the main container.
+# It ends right before the modals.
+old_end = """        <footer className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#d4af37]/75">
+          <p className="tracking-wider">© 2026 Emmanuel Baraka • wakili.barakalines.com</p>
+        </footer>
+      </div>
+      
       {/* ========================================================= */}
-      <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6 md:p-8 z-30">"""
+      {/* LAYER 5: Overlays & Modals (z: +999px)                      */}"""
 
-new_room_two = """          </motion.div>
-        </motion.div>
-
-        {/* ROOM 2: Scroll Target */}
-        <motion.div
-          style={{ rotateX: scrollRoom2RotateX, z: scrollRoom2Z, opacity: scrollRoom2Opacity }}
-          className="absolute inset-0 preserve-3d flex items-center justify-center pointer-events-none"
-        >
-          <RoomTwo isNightMode={isNightMode} rotateX={rotateX} rotateY={rotateY} panX={panX} panY={panY} />
-        </motion.div>
-
+new_end = """        <footer className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#d4af37]/75">
+          <p className="tracking-wider">© 2026 Emmanuel Baraka • wakili.barakalines.com</p>
+        </footer>
+      </div>
+      </div>
+      
       {/* ========================================================= */}
-      {/* LAYER 4: Interface HUD / Header Overlay (z: +150px)       */}
-      {/* ========================================================= */}
-      <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6 md:p-8 z-30">"""
+      {/* LAYER 5: Overlays & Modals (z: +999px)                      */}"""
 
-# We need to replace the closing `</motion.div>` of the Room 1 rig as well.
-# Let's use regex to find the closing motion.div before LAYER 4.
-content = re.sub(r'(\s*</motion\.div>\s*)' + re.escape("""      {/* ========================================================= */}
-      {/* LAYER 4: Interface HUD / Header Overlay (z: +150px)       */}
-      {/* ========================================================= */}
-      <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6 md:p-8 z-30">"""), new_room_two, content)
+content = content.replace(old_end, new_end)
 
-
-# 5. Add closing div for the scroll container at the very end
-content = re.sub(r'(      <BookshelfModal isOpen=\{isBookshelfOpen\} onClose=\{\(\) => setIsBookshelfOpen\(false\)\} />\s*</div>\s*)\);\s*\}', r'\1    </div>\n  );\n}', content)
-
-
-with open("src/components/OfficeRoom.tsx", "w") as f:
+with open('src/components/OfficeRoom.tsx', 'w') as f:
     f.write(content)
+

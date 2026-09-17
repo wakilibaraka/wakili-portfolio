@@ -42,9 +42,9 @@ export default function CustomCursor({ isNightMode }: { isNightMode: boolean }) 
     return null;
   }
 
-  const primaryColor = isNightMode ? "text-emerald-400" : "text-[#d4af37]";
-  const secondaryColor = isNightMode ? "text-emerald-200" : "text-[#f3cf65]";
-  const fillColor = isNightMode ? "fill-emerald-950" : "fill-[#382015]";
+  const primaryColor = isNightMode ? "text-emerald-400" : "text-accent-brass";
+  const secondaryColor = isNightMode ? "text-emerald-200" : "text-accent-gold";
+  const fillColor = isNightMode ? "fill-emerald-950" : "fill-wood-mahogany";
 
   return (
     <>
