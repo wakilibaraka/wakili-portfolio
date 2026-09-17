@@ -131,7 +131,7 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
         </div>
 
         {/* CSS Character: Emmanuel Baraka */}
-        <div className="absolute bottom-16 md:bottom-20 flex flex-col items-center z-10 scale-90 md:scale-100 origin-bottom">
+        <div className="absolute bottom-16 md:bottom-20 flex flex-col items-center z-10 scale-90 md:scale-100 origin-bottom animate-breathe">
           
           {/* Head & Face */}
           <div className="relative w-24 h-32 mb-1">
@@ -146,10 +146,10 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
             <div className="absolute top-10 left-3 w-6 h-1.5 bg-[#1a1a1a] rounded-full rotate-[5deg]" />
             <div className="absolute top-10 right-3 w-6 h-1.5 bg-[#1a1a1a] rounded-full -rotate-[5deg]" />
             {/* Eyes (Looking down at laptop) */}
-            <div className="absolute top-14 left-4 w-5 h-2.5 bg-white rounded-full flex items-center justify-center overflow-hidden border-t-2 border-[#3a1f10] shadow-inner">
+            <div className="absolute top-14 left-4 w-5 h-2.5 bg-white rounded-full flex items-center justify-center overflow-hidden border-t-2 border-[#3a1f10] shadow-inner animate-blink">
                <div className="w-2.5 h-2.5 bg-[#2a170b] rounded-full translate-y-0.5" />
             </div>
-            <div className="absolute top-14 right-4 w-5 h-2.5 bg-white rounded-full flex items-center justify-center overflow-hidden border-t-2 border-[#3a1f10] shadow-inner">
+            <div className="absolute top-14 right-4 w-5 h-2.5 bg-white rounded-full flex items-center justify-center overflow-hidden border-t-2 border-[#3a1f10] shadow-inner animate-blink">
                <div className="w-2.5 h-2.5 bg-[#2a170b] rounded-full translate-y-0.5" />
             </div>
             {/* Nose */}
@@ -181,7 +181,12 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
             
             {/* Arms reaching to laptop */}
             <div className="absolute top-8 -left-6 w-16 h-32 bg-[#151515] rounded-l-2xl origin-top rotate-45 shadow-lg" />
-            <div className="absolute top-8 -right-6 w-16 h-32 bg-[#151515] rounded-r-2xl origin-top -rotate-45 shadow-lg" />
+            <div className="absolute top-8 -right-6 w-16 h-32 bg-[#151515] rounded-r-2xl origin-top -rotate-45 shadow-lg flex flex-col justify-end items-center pb-2">
+               {/* Hand holding the teacup */}
+               <div className="rotate-45 translate-x-2 translate-y-4">
+                 <TeaSteam />
+               </div>
+            </div>
           </div>
         </div>
       </div>
@@ -271,11 +276,6 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
                 <div className="w-36 h-7 bg-[#24140d] rounded-sm border-l border-white/20 shadow-md mt-0.5 flex items-center px-2">
                    <div className="w-1 h-5 bg-[#d4af37] rounded-sm" />
                 </div>
-             </div>
-             
-             {/* Tea */}
-             <div className="mr-6 mt-2">
-               <TeaSteam />
              </div>
           </div>
         </div>
