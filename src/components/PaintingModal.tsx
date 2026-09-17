@@ -74,13 +74,13 @@ export default function PaintingModal({ isOpen, onClose }: PaintingModalProps) {
                     <Mail className="w-5 h-5 text-accent-brass" />
                     <div>
                       <p className="text-[11px] uppercase tracking-wider text-accent-brass/70">Email Inquiries</p>
-                      <a href="mailto:info@barakalines.com" className="text-sm font-medium hover:underline">
-                        info@barakalines.com
+                      <a href="mailto:wakilibara@gmail.com" className="text-sm font-medium hover:underline">
+                        wakilibara@gmail.com
                       </a>
                     </div>
                   </div>
                   <button
-                    onClick={() => copyToClipboard("info@barakalines.com", "email")}
+                    onClick={() => copyToClipboard("wakilibara@gmail.com", "email")}
                     className="p-2 text-xs rounded-lg hover:bg-accent-brass/15 text-accent-brass transition-colors"
                   >
                     {copiedField === "email" ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
@@ -93,13 +93,13 @@ export default function PaintingModal({ isOpen, onClose }: PaintingModalProps) {
                     <Phone className="w-5 h-5 text-accent-brass" />
                     <div>
                       <p className="text-[11px] uppercase tracking-wider text-accent-brass/70">Chambers Direct Line</p>
-                      <a href="tel:254712345678" className="text-sm font-medium hover:underline">
-                        +254 712 345 678
+                      <a href="tel:254797078998" className="text-sm font-medium hover:underline">
+                        +254 797 078 998
                       </a>
                     </div>
                   </div>
                   <button
-                    onClick={() => copyToClipboard("+254700000000", "phone")}
+                    onClick={() => copyToClipboard("+254797078998", "phone")}
                     className="p-2 text-xs rounded-lg hover:bg-accent-brass/15 text-accent-brass transition-colors"
                   >
                     {copiedField === "phone" ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}

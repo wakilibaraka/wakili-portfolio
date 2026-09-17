@@ -87,22 +87,22 @@ export default function OverlayUI() {
                 <div>
                   <h2 className="text-3xl font-bold mb-6 text-accent">Let's Connect</h2>
                   <div className="space-y-6">
-                    <a href="mailto:info@barakalines.com" className="flex items-center gap-4 group">
+                    <a href="mailto:wakilibara@gmail.com" className="flex items-center gap-4 group">
                       <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center group-hover:bg-accent group-hover:text-white transition-all text-accent">
                         <Mail className="w-5 h-5" />
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-text-muted">Email</p>
-                        <p className="font-bold text-text-main">info@barakalines.com</p>
+                        <p className="font-bold text-text-main">wakilibara@gmail.com</p>
                       </div>
                     </a>
-                    <a href="tel:254712345678" aria-label="Call Emmanuel Baraka" className="flex items-center gap-4 group">
+                    <a href="tel:254797078998" aria-label="Call Emmanuel Baraka" className="flex items-center gap-4 group">
                       <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center group-hover:bg-accent group-hover:text-white transition-all text-accent">
                         <Phone className="w-5 h-5" />
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-text-muted">Phone</p>
-                        <p className="font-bold text-text-main">+254 712 345 678</p>
+                        <p className="font-bold text-text-main">+254 797 078 998</p>
                       </div>
                     </a>
                     <div className="flex items-center gap-4 group">

@@ -13,6 +13,20 @@ import ContactModal from "./ContactModal";
 import { useTelephoneRing } from "../hooks/useTelephoneRing";
 import SimuYaJamiiModal from "./SimuYaJamiiModal";
 
+
+const Linkedin = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+);
+const Instagram = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+);
+const Twitter = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+);
+const Facebook = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+);
+
 export default function OfficeRoom() {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => { setIsMounted(true); }, []);
@@ -492,6 +506,12 @@ export default function OfficeRoom() {
         <footer className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-accent-brass/75">
 
 
+          <div className="flex items-center gap-4 z-50 pointer-events-auto">
+            <a href="https://www.linkedin.com/in/wakilibaraka" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" className="hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-brass rounded"><Linkedin className="w-4 h-4" /></a>
+            <a href="https://www.instagram.com/wakilibaraka" target="_blank" rel="noopener noreferrer" aria-label="Instagram profile" className="hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-brass rounded"><Instagram className="w-4 h-4" /></a>
+            <a href="https://x.com/wakilibaraka" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter) profile" className="hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-brass rounded"><Twitter className="w-4 h-4" /></a>
+            <a href="https://www.facebook.com/wakilibaraka" target="_blank" rel="noopener noreferrer" aria-label="Facebook profile" className="hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-brass rounded"><Facebook className="w-4 h-4" /></a>
+          </div>
           <p className="text-[11px] font-serif italic text-white/60">
             © {new Date().getFullYear()} Emmanuel Baraka • wakili.barakalines.com
           </p>

@@ -49,17 +49,17 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             </h2>
 
             <div className="space-y-4">
-              <a href="tel:254712345678" aria-label="Call Emmanuel Baraka" className="flex items-center gap-4 p-4 rounded-xl bg-white border border-black/10 hover:border-accent-brass hover:shadow-md transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-brass">
+              <a href="tel:254797078998" aria-label="Call Emmanuel Baraka" className="flex items-center gap-4 p-4 rounded-xl bg-white border border-black/10 hover:border-accent-brass hover:shadow-md transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-brass">
                 <div className="w-10 h-10 rounded-full bg-mono-900 text-white flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Phone size={18} />
                 </div>
                 <div>
-                  <div className="font-bold text-lg">+254 712 345 678</div>
+                  <div className="font-bold text-lg">+254 797 078 998</div>
                   <div className="text-sm text-ink-muted">Direct Line</div>
                 </div>
               </a>
               
-              <a href="https://wa.me/254712345678?text=Hello%20Emmanuel%2C%20I%27d%20like%20to%20book%20a%20consultation." aria-label="Message on WhatsApp" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 rounded-xl bg-white border border-black/10 hover:border-whatsapp-base hover:shadow-md transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-whatsapp-base">
+              <a href="https://wa.me/254797078998?text=Hello%20Emmanuel%2C%20I%27d%20like%20to%20book%20a%20consultation." aria-label="Message on WhatsApp" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 rounded-xl bg-white border border-black/10 hover:border-whatsapp-base hover:shadow-md transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-whatsapp-base">
                 <div className="w-10 h-10 rounded-full bg-whatsapp-base text-white flex items-center justify-center group-hover:scale-110 transition-transform">
                   <MessageCircle size={18} />
                 </div>
@@ -69,12 +69,12 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 </div>
               </a>
 
-              <a href="mailto:info@barakalines.com" aria-label="Email Emmanuel Baraka" className="flex items-center gap-4 p-4 rounded-xl bg-white border border-black/10 hover:border-accent-terracotta hover:shadow-md transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-terracotta">
+              <a href="mailto:wakilibara@gmail.com" aria-label="Email Emmanuel Baraka" className="flex items-center gap-4 p-4 rounded-xl bg-white border border-black/10 hover:border-accent-terracotta hover:shadow-md transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-terracotta">
                 <div className="w-10 h-10 rounded-full bg-accent-terracotta text-white flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Mail size={18} />
                 </div>
                 <div>
-                  <div className="font-bold text-lg">info@barakalines.com</div>
+                  <div className="font-bold text-lg">wakilibara@gmail.com</div>
                   <div className="text-sm text-ink-muted">Email Inquiries</div>
                 </div>
               </a>
