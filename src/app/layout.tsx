@@ -15,10 +15,29 @@ const cinzel = Cinzel({
 });
 
 export const metadata: Metadata = {
-  title: "Emmanuel Baraka | Advocate & Legal Counsel",
-  description: "Interactive Chambers & Portfolio of Emmanuel Baraka, Advocate of the High Court.",
-  icons: {
-    icon: "/favicon.ico",
+  metadataBase: new URL("https://wakilibaraka.github.io/wakili-portfolio/"),
+  title: "Emmanuel Baraka — Advocate of the High Court of Kenya",
+  description: "Emmanuel Baraka is an Advocate of the High Court of Kenya and policy strategist committed to justice, equity, and truth.",
+  openGraph: {
+    title: "Emmanuel Baraka — Advocate of the High Court of Kenya",
+    description: "Emmanuel Baraka is an Advocate of the High Court of Kenya and policy strategist committed to justice, equity, and truth.",
+    url: "https://wakilibaraka.github.io/wakili-portfolio/",
+    siteName: "Emmanuel Baraka",
+    type: "website",
+    images: [
+      {
+        url: "https://wakilibaraka.github.io/wakili-portfolio/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Emmanuel Baraka — 3D Office Preview",
+      }
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Emmanuel Baraka — Advocate of the High Court of Kenya",
+    description: "Emmanuel Baraka is an Advocate of the High Court of Kenya and policy strategist committed to justice, equity, and truth.",
+    images: ["https://wakilibaraka.github.io/wakili-portfolio/og-image.png"],
   },
 };
 
