@@ -61,7 +61,7 @@ export default function PaintingModal({ isOpen, onClose }: PaintingModalProps) {
                     Emmanuel Baraka
                   </h3>
                   <p className="text-xs uppercase tracking-widest text-accent-brass/80">
-                    Advocate of the High Court • Legal Counsel
+                    Law · Human Rights · Policy
                   </p>
                 </div>
               </div>

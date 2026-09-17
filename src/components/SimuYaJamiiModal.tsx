@@ -14,7 +14,7 @@ export default function SimuYaJamiiModal({ isOpen, onClose }: BookingModalProps)
   const [activeStep, setActiveStep] = useState(0);
 
   const handleBookWhatsapp = () => {
-    window.open("https://wa.me/254797078998?text=Hello%20Emmanuel%2C%20I%27d%20like%20to%20book%20a%20consultation.", "_blank");
+    window.open("https://wa.me/254797078998?text=Hello%20Emmanuel%2C%20I%27d%20like%20to%20get%20in%20touch.", "_blank");
     setActiveStep(1);
     setTimeout(() => { setActiveStep(0); onClose(); }, 3000);
   };
@@ -57,7 +57,7 @@ export default function SimuYaJamiiModal({ isOpen, onClose }: BookingModalProps)
                   Simu ya Jamii
                 </h3>
                 <p className="text-[9px] uppercase tracking-widest text-whatsapp-base font-bold mt-1">
-                  Chambers Booking Terminal
+                  Consultation Terminal
                 </p>
               </div>
 
@@ -85,7 +85,7 @@ export default function SimuYaJamiiModal({ isOpen, onClose }: BookingModalProps)
                       className="w-full py-4 rounded-xl bg-gradient-to-r from-whatsapp-bright to-shade-92 text-white font-bold tracking-wide uppercase text-sm shadow-[0_5px_15px_rgba(37,211,102,0.4)] flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-transform"
                     >
                       <MessageSquare className="w-5 h-5" />
-                      WhatsApp Booking
+                      WhatsApp / Get in Touch
                     </button>
                     <button 
                       onClick={() => { window.location.href = "mailto:wakilibara@gmail.com"; }}

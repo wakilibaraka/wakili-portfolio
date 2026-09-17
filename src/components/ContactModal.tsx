@@ -59,7 +59,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 </div>
               </a>
               
-              <a href="https://wa.me/254797078998?text=Hello%20Emmanuel%2C%20I%27d%20like%20to%20book%20a%20consultation." aria-label="Message on WhatsApp" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 rounded-xl bg-white border border-black/10 hover:border-whatsapp-base hover:shadow-md transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-whatsapp-base">
+              <a href="https://wa.me/254797078998?text=Hello%20Emmanuel%2C%20I%27d%20like%20to%20get%20in%20touch." aria-label="Message on WhatsApp" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 rounded-xl bg-white border border-black/10 hover:border-whatsapp-base hover:shadow-md transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-whatsapp-base">
                 <div className="w-10 h-10 rounded-full bg-whatsapp-base text-white flex items-center justify-center group-hover:scale-110 transition-transform">
                   <MessageCircle size={18} />
                 </div>

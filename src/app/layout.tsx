@@ -16,11 +16,11 @@ const cinzel = Cinzel({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://wakilibaraka.github.io/wakili-portfolio/"),
-  title: "Emmanuel Baraka — Advocate of the High Court of Kenya",
-  description: "Emmanuel Baraka is an Advocate of the High Court of Kenya and policy strategist committed to justice, equity, and truth.",
+  title: "Emmanuel Baraka — Law, Human Rights & Policy",
+  description: "Emmanuel Baraka is a law graduate and human-rights practitioner completing admission as an Advocate of the High Court of Kenya — focused on constitutional litigation, human rights, and policy.",
   openGraph: {
-    title: "Emmanuel Baraka — Advocate of the High Court of Kenya",
-    description: "Emmanuel Baraka is an Advocate of the High Court of Kenya and policy strategist committed to justice, equity, and truth.",
+    title: "Emmanuel Baraka — Law, Human Rights & Policy",
+    description: "Emmanuel Baraka is a law graduate and human-rights practitioner completing admission as an Advocate of the High Court of Kenya — focused on constitutional litigation, human rights, and policy.",
     url: "https://wakilibaraka.github.io/wakili-portfolio/",
     siteName: "Emmanuel Baraka",
     type: "website",
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Emmanuel Baraka — Advocate of the High Court of Kenya",
-    description: "Emmanuel Baraka is an Advocate of the High Court of Kenya and policy strategist committed to justice, equity, and truth.",
+    title: "Emmanuel Baraka — Law, Human Rights & Policy",
+    description: "Emmanuel Baraka is a law graduate and human-rights practitioner completing admission as an Advocate of the High Court of Kenya — focused on constitutional litigation, human rights, and policy.",
     images: ["https://wakilibaraka.github.io/wakili-portfolio/og-image.png"],
   },
 };

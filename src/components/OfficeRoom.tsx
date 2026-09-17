@@ -209,8 +209,8 @@ export default function OfficeRoom() {
                >
                  <div className="absolute inset-1 border border-shade-32/40 rounded-sm pointer-events-none" />
                  <p className="text-shade-3 font-serif font-bold text-[7px] md:text-[8px] tracking-[0.1em] md:tracking-[0.15em] text-center uppercase leading-tight drop-shadow-[0_1px_0_rgba(255,255,255,0.3)]">
-                   BOOK<br/>
-                   <span className="text-wood-ink text-[8px] md:text-[10px] leading-tight">APPOINTMENT</span>
+                   GET IN<br/>
+                   <span className="text-wood-ink text-[8px] md:text-[10px] leading-tight">TOUCH</span>
                  </p>
                  {/* Click indicator dot */}
                  <div className="absolute right-1 top-1 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-80 animate-ping" />
@@ -474,7 +474,7 @@ export default function OfficeRoom() {
                 Emmanuel Baraka
               </h1>
               <p className="text-[9px] md:text-xs uppercase tracking-widest text-accent-brass/80 font-medium">
-                Advocate & Policy Strategist
+                Lawyer & Policy Strategist
               </p>
             </div>
           </div>

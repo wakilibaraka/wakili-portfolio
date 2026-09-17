@@ -3,89 +3,59 @@ import re
 with open("src/components/RoomTwo.tsx", "r") as f:
     content = f.read()
 
-# 1. Imports
-content = content.replace('import React from "react";', 'import React, { useState, useEffect } from "react";')
+# 1. Update Desk Plaque
+old_plaque = """             <div className="w-48 h-12 bg-gradient-to-b from-mono-950 to-shade-20 rounded-sm border-2 border-accent-brass shadow-[0_10px_20px_rgba(0,0,0,0.6)] flex flex-col items-center justify-center p-1 transform rotate-[-5deg]">
+                <p className="text-accent-brass font-serif font-bold text-[9px] tracking-widest">EMMANUEL BARAKA</p>
+                <div className="w-40 h-[1px] bg-accent-brass/40 my-0.5" />
+                <p className="text-accent-gold/70 text-[5px] tracking-[0.1em] uppercase">© {new Date().getFullYear()} Emmanuel Baraka • wakili.barakalines.com</p>
+             </div>"""
+new_plaque = """             <div className="w-48 h-12 bg-gradient-to-b from-mono-950 to-shade-20 rounded-sm border-2 border-accent-brass shadow-[0_10px_20px_rgba(0,0,0,0.6)] flex flex-col items-center justify-center p-1 transform rotate-[-5deg]">
+                <p className="text-accent-brass font-serif font-bold text-[9px] tracking-widest">EMMANUEL BARAKA</p>
+                <div className="w-40 h-[1px] bg-accent-brass/40 my-0.5" />
+                <p className="text-accent-gold/70 text-[5px] tracking-[0.1em] uppercase text-center">LL.B (Hons) · Advocates Training Program, KSL</p>
+             </div>"""
+content = content.replace(old_plaque, new_plaque)
 
-# 2. Add TerminalScreen component at the bottom of the file
-terminal_component = """
-function TerminalScreen({ prefersReducedMotion, isNightMode }: { prefersReducedMotion: boolean | null, isNightMode: boolean }) {
-  const [text, setText] = useState("");
-  const [phase, setPhase] = useState(0);
+# 2. Update Terminal Screen
+content = content.replace(
+    'const fullCommand = \'./compile_defense.sh --case="Republic v. State"\';',
+    'const fullCommand = \'./research_brief.sh --topic="Constitutional Rights"\';'
+)
+content = content.replace('./compile_defense.sh --case="Republic v. State"', './research_brief.sh --topic="Constitutional Rights"')
+content = content.replace('Defense strategy compiled.', 'COMPILING HUMAN RIGHTS BRIEF')
 
-  const fullCommand = './compile_defense.sh --case="Republic v. State"';
+# 3. Add Credentials Panel
+old_art = """            {/* Framed Quote */}
+            <div className="w-40 h-48 bg-wood-blackest border-[6px] border-accent-brass shadow-[10px_10px_20px_rgba(0,0,0,0.6)] p-3 flex flex-col items-center justify-center text-center">
+              <Scale className="w-8 h-8 text-accent-brass mb-3 opacity-80" />
+              <p className="font-serif text-accent-brass font-bold tracking-widest text-sm leading-relaxed">
+                JUSTICE<br/>EQUITY<br/><span className="text-xs">&amp;</span><br/>TRUTH
+              </p>
+            </div>"""
 
-  useEffect(() => {
-    if (prefersReducedMotion) return;
+new_art = """            {/* Framed Quote */}
+            <div className="w-40 h-40 bg-wood-blackest border-[6px] border-accent-brass shadow-[10px_10px_20px_rgba(0,0,0,0.6)] p-2 flex flex-col items-center justify-center text-center">
+              <Scale className="w-6 h-6 text-accent-brass mb-2 opacity-80" />
+              <p className="font-serif text-accent-brass font-bold tracking-widest text-xs leading-relaxed">
+                JUSTICE<br/>EQUITY<br/><span className="text-[10px]">&amp;</span><br/>TRUTH
+              </p>
+            </div>
+            
+            {/* Credentials Panel */}
+            <div className="w-48 bg-wood-blackest border-[4px] border-accent-brass shadow-[10px_10px_20px_rgba(0,0,0,0.6)] p-3 text-accent-brass flex flex-col gap-1.5 -mt-6">
+              <h3 className="font-serif font-bold text-[9px] tracking-widest text-center border-b border-accent-brass/30 pb-1 mb-1">EDUCATION</h3>
+              <ul className="text-[7px] tracking-wider space-y-1.5 font-sans opacity-90 leading-[1.2]">
+                <li><span className="font-bold text-accent-gold">LL.B (Hons, Upper Second)</span><br/>Kisii University</li>
+                <li><span className="font-bold text-accent-gold">Advocates Training Program</span><br/>Kenya School of Law</li>
+                <li><span className="font-bold text-accent-gold">MSc, Security & Human Rights</span><br/>Kenya School of Law (ongoing)</li>
+              </ul>
+              <h3 className="font-serif font-bold text-[9px] tracking-widest text-center border-b border-accent-brass/30 pb-1 mb-1 mt-2">FOCUS</h3>
+              <p className="text-[7px] tracking-wider font-sans opacity-90 leading-tight text-center">
+                Constitutional & human-rights litigation · Strategic litigation · Policy
+              </p>
+            </div>"""
 
-    if (phase === 0) {
-      if (text.length < fullCommand.length) {
-        const t = setTimeout(() => {
-          setText(fullCommand.slice(0, text.length + 1));
-        }, Math.random() * 30 + 20);
-        return () => clearTimeout(t);
-      } else {
-        const t = setTimeout(() => setPhase(1), 500);
-        return () => clearTimeout(t);
-      }
-    } else if (phase === 1) {
-      const t = setTimeout(() => setPhase(2), 1200);
-      return () => clearTimeout(t);
-    } else if (phase === 2) {
-      const t = setTimeout(() => setPhase(3), 800);
-      return () => clearTimeout(t);
-    } else if (phase === 3) {
-      const t = setTimeout(() => {
-        setText("");
-        setPhase(0);
-      }, 4000);
-      return () => clearTimeout(t);
-    }
-  }, [text, phase, prefersReducedMotion, fullCommand]);
-
-  if (prefersReducedMotion) {
-    return (
-      <div className={`space-y-2 font-mono text-[8px] md:text-[9px] tracking-widest transition-colors duration-1000 ${isNightMode ? "text-emerald-400" : "text-emerald-500"}`}>
-        <p>&gt; ./compile_defense.sh --case="Republic v. State"</p>
-        <p className="opacity-80">Loading precedents [██████████] 100%</p>
-        <p className="opacity-80 text-blue-400">Defense strategy compiled.</p>
-        <p className="mt-2 text-yellow-400">&gt; READY</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className={`space-y-2 font-mono text-[8px] md:text-[9px] tracking-widest transition-colors duration-1000 ${isNightMode ? "text-emerald-400" : "text-emerald-500"}`}>
-      <p>&gt; {text}{phase === 0 && <span className="animate-pulse">_</span>}</p>
-      {phase >= 1 && <p className="opacity-80">Loading precedents [████████░░] 80%</p>}
-      {phase >= 2 && <p className="opacity-80 text-blue-400">Defense strategy compiled.</p>}
-      {phase >= 3 && <p className="mt-2 text-yellow-400">&gt; READY<span className="animate-pulse">_</span></p>}
-    </div>
-  );
-}
-"""
-
-content = content + "\n" + terminal_component
-
-# 3. Replace the static code block
-old_block = """              {/* Terminal Code lines */}
-              <div className={`space-y-2 font-mono text-[8px] md:text-[9px] tracking-widest transition-colors duration-1000 ${isNightMode ? "text-emerald-400" : "text-emerald-500"}`}>
-                <p>&gt; ./compile_defense.sh --case="Republic v. State"</p>
-                <p className="opacity-80">Loading precedents [████████░░] 80%</p>
-                <p className="opacity-80 text-blue-400">Fetching constitutional clauses...</p>
-                <div className="w-full h-1.5 bg-mono-900 rounded mt-2 overflow-hidden border border-mono-800">
-                   <div className="w-3/4 h-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
-                </div>
-                <p className="mt-2 text-yellow-400">&gt; ANALYZING LOOPHOLES_</p>
-              </div>"""
-
-new_block = """              {/* Terminal Code lines */}
-              <TerminalScreen prefersReducedMotion={prefersReducedMotion} isNightMode={isNightMode} />"""
-
-if old_block in content:
-    content = content.replace(old_block, new_block)
-else:
-    print("Warning: old block not found perfectly, trying regex...")
-    content = re.sub(r'\{/\* Terminal Code lines \*/\}.*?</p>\s*</div>', new_block, content, flags=re.DOTALL)
+content = content.replace(old_art, new_art)
 
 with open("src/components/RoomTwo.tsx", "w") as f:
     f.write(content)
