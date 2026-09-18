@@ -244,7 +244,7 @@ export default function OfficeRoom() {
             </div>
 
             {/* Standing Figure (Waiting for phone) */}
-            <div className="absolute bottom-4 md:bottom-2 left-2 md:left-12 scale-[0.45] md:scale-50 origin-bottom z-10 flex flex-col items-center pointer-events-none">
+            <div className="absolute bottom-4 md:bottom-2 -left-4 md:left-2 scale-[0.45] md:scale-50 origin-bottom z-10 flex flex-col items-center pointer-events-none">
               
               {/* Head (Reused from RoomTwo) */}
               <div className="relative w-28 h-32 bg-shade-70 rounded-[40%] flex flex-col items-center shadow-[inset_0_-10px_20px_rgba(0,0,0,0.5)] z-20">

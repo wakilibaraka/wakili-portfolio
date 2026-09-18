@@ -15,18 +15,18 @@ const cinzel = Cinzel({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://wakilibaraka.github.io/wakili-portfolio/"),
+  metadataBase: new URL("https://wakili.barakalines.com/"),
   title: "Emmanuel Baraka — Law, Human Rights & Policy",
   description: "Emmanuel Baraka is a law graduate and human-rights practitioner completing admission as an Advocate of the High Court of Kenya — focused on constitutional litigation, human rights, and policy.",
   openGraph: {
     title: "Emmanuel Baraka — Law, Human Rights & Policy",
     description: "Emmanuel Baraka is a law graduate and human-rights practitioner completing admission as an Advocate of the High Court of Kenya — focused on constitutional litigation, human rights, and policy.",
-    url: "https://wakilibaraka.github.io/wakili-portfolio/",
+    url: "https://wakili.barakalines.com/",
     siteName: "Emmanuel Baraka",
     type: "website",
     images: [
       {
-        url: "https://wakilibaraka.github.io/wakili-portfolio/og-image.png",
+        url: "https://wakili.barakalines.com/og-image.png",
         width: 1200,
         height: 630,
         alt: "Emmanuel Baraka — 3D Office Preview",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Emmanuel Baraka — Law, Human Rights & Policy",
     description: "Emmanuel Baraka is a law graduate and human-rights practitioner completing admission as an Advocate of the High Court of Kenya — focused on constitutional litigation, human rights, and policy.",
-    images: ["https://wakilibaraka.github.io/wakili-portfolio/og-image.png"],
+    images: ["https://wakili.barakalines.com/og-image.png"],
   },
 };
 
