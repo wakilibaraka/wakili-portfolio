@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useScroll, AnimatePresence, useReducedMotion } from "framer-motion";
 import RoomTwo from "./RoomTwo";
-import { Scale, BookOpen, Mail, Phone, Compass, Sparkles, Power } from "lucide-react";
+import { Scale, BookOpen, Mail, Phone, Compass, Sparkles, Power, Volume2, VolumeX } from "lucide-react";
 import TeaSteam from "./TeaSteam";
 import CustomCursor from "./CustomCursor";
 import PaintingModal from "./PaintingModal";
@@ -12,8 +12,10 @@ import MissionModal from "./MissionModal";
 import AboutModal from "./AboutModal";
 import ContactModal from "./ContactModal";
 import { useTelephoneRing } from "../hooks/useTelephoneRing";
+import { useAmbientSound } from "../hooks/useAmbientSound";
 import { useClickSound } from "../hooks/useClickSound";
 import SimuYaJamiiModal from "./SimuYaJamiiModal";
+import LaptopTerminalModal from "./LaptopTerminalModal";
 
 
 const Linkedin = ({ className }: { className?: string }) => (
@@ -36,17 +38,30 @@ export default function OfficeRoom() {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isPhonePickedUp, setIsPhonePickedUp] = useState(false);
-  const { playPickUpClack } = useTelephoneRing();
+  const { playRing, stopRing, playPickUpClack, isAllowed: isAudioAllowed } = useTelephoneRing();
   const { playClickSound } = useClickSound();
   const [isBookshelfOpen, setIsBookshelfOpen] = useState(false);
   const [isMissionOpen, setIsMissionOpen] = useState(false);
   const [isDeskPhoneOpen, setIsDeskPhoneOpen] = useState(false);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+  const [terminalSession, setTerminalSession] = useState(0);
   const [hasGyroscope, setHasGyroscope] = useState(false);
   const [interactionMode, setInteractionMode] = useState<"mouse" | "gyro" | "touch">("mouse");
   const [isNightMode, setIsNightMode] = useState(false);
-
-  // Multi-Room Scroll Logic (Revolving Door on Y Axis)
+  // P10: hotspot dots dismiss after first interaction each
+  const [seen, setSeen] = useState<Record<string, boolean>>({});
+  const markSeen = (id: string) => setSeen((s) => (s[id] ? s : { ...s, [id]: true }));
+  // P8: bulb hover flicker burst
+  const [flickering, setFlickering] = useState(false);
+  // P4: periodic incoming call state
+  const [incomingCall, setIncomingCall] = useState(false);
+  const phoneDoneRef = useRef(false);
+  // P13: konami toast + confetti
+  const [toast, setToast] = useState<string | null>(null);
+  const [confetti, setConfetti] = useState<{ id: number; left: number; color: string; delay: number }[]>([]);
+  // P5: ambient sound (muted by default under reduced motion)
   const prefersReducedMotion = useReducedMotion();
+  const { muted, toggleMuted, playTick } = useAmbientSound(prefersReducedMotion ?? false);
   const { scrollYProgress } = useScroll();
   
   // Room 1 (Reception): Rotates to the right (-90deg on Y axis)
@@ -72,6 +87,7 @@ export default function OfficeRoom() {
 
   const toggleNightMode = () => {
     playClickSound();
+    markSeen("switch");
     setIsNightMode(prev => !prev);
   };
 
@@ -95,19 +111,75 @@ export default function OfficeRoom() {
   const smoothX = useSpring(rawX, springConfig);
   const smoothY = useSpring(rawY, springConfig);
 
-  // 3D Rotations & Translations
+  // 3D Rotations & Translations (P9: layered amplitudes for depth)
   const rotateY = useTransform(smoothX, [-1, 1], [-8, 8]);
   const rotateX = useTransform(smoothY, [-1, 1], [6, -6]);
-  const panX = useTransform(smoothX, [-1, 1], [-18, 18]);
-  const panY = useTransform(smoothY, [-1, 1], [-14, 14]);
+  const panX = useTransform(smoothX, [-1, 1], [-26, 26]);
+  const panY = useTransform(smoothY, [-1, 1], [-20, 20]);
 
   // Deep Background shift
-  const bgShiftX = useTransform(smoothX, [-1, 1], [10, -10]);
-  const bgShiftY = useTransform(smoothY, [-1, 1], [8, -8]);
+  const bgShiftX = useTransform(smoothX, [-1, 1], [14, -14]);
+  const bgShiftY = useTransform(smoothY, [-1, 1], [10, -10]);
 
   // Foreground extra pop shift
-  const fgShiftX = useTransform(smoothX, [-1, 1], [-26, 26]);
-  const fgShiftY = useTransform(smoothY, [-1, 1], [-20, 20]);
+  const fgShiftX = useTransform(smoothX, [-1, 1], [-34, 34]);
+  const fgShiftY = useTransform(smoothY, [-1, 1], [-26, 26]);
+
+  // P8: bulb pendulum follows the pointer spring
+  const bulbRotate = useTransform(smoothX, [-1, 1], [-7, 7]);
+  // P11: welcome overlay fades on first scroll
+  const welcomeOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
+
+  // P4: periodic incoming call — rings every ~20s until the phone is touched
+  useEffect(() => {
+    if (!isAudioAllowed || prefersReducedMotion) return;
+    const id = window.setInterval(() => {
+      if (phoneDoneRef.current || document.hidden) return;
+      if (isPaintingOpen || isDeskPhoneOpen || isTerminalOpen || isBookingOpen || isAboutOpen) return;
+      setIncomingCall(true);
+      playRing();
+      window.setTimeout(() => {
+        stopRing();
+        setIncomingCall(false);
+      }, 2500);
+    }, 20000);
+    return () => window.clearInterval(id);
+  }, [isAudioAllowed, prefersReducedMotion, isPaintingOpen, isDeskPhoneOpen, isTerminalOpen, isBookingOpen, isAboutOpen, playRing, stopRing]);
+
+  // P5: typing ticks while the terminal is open
+  useEffect(() => {
+    if (!isTerminalOpen) return;
+    const onKey = () => playTick();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isTerminalOpen, playTick]);
+
+  // P13: Konami listener → confetti + toast
+  useEffect(() => {
+    const seq = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+    let pos = 0;
+    const onKey = (e: KeyboardEvent) => {
+      const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      pos = key === seq[pos] ? pos + 1 : key === seq[0] ? 1 : 0;
+      if (pos === seq.length) {
+        pos = 0;
+        const colors = ["#d4af37", "#f3cf65", "#c25e3e", "#2ec274", "#88a5d6", "#f7f5ee"];
+        setConfetti(Array.from({ length: 48 }, (_, i) => ({
+          id: Date.now() + i,
+          left: Math.random() * 100,
+          color: colors[i % colors.length],
+          delay: Math.random() * 0.6,
+        })));
+        setToast("Constitutional crisis averted");
+        window.setTimeout(() => {
+          setConfetti([]);
+          setToast(null);
+        }, 3200);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   // Handle Desktop Mouse Move
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -331,12 +403,24 @@ export default function OfficeRoom() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => {
+                  phoneDoneRef.current = true;
+                  stopRing();
+                  setIncomingCall(false);
+                  markSeen("phone");
                   playPickUpClack();
                   setIsPhonePickedUp(true);
                   setTimeout(() => setIsPaintingOpen(true), 300);
                 }}
-                className={`group cursor-pointer relative ${(!isPhonePickedUp && !prefersReducedMotion) ? "animate-telephone-ring" : ""}`}
+                className={`group group/hotspot cursor-pointer relative ${(incomingCall && !prefersReducedMotion) ? "animate-telephone-ring" : ""}`}
               >
+                {/* P10: hotspot dot */}
+                {!seen.phone && !prefersReducedMotion && (
+                  <span className="absolute -top-3 -right-3 z-20 flex w-5 h-5" aria-hidden="true">
+                    <span className="hotspot-ping absolute inline-flex h-full w-full rounded-full bg-amber-300" />
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 m-auto bg-amber-300 border border-black/40" />
+                    <span className="hotspot-tooltip absolute left-1/2 top-full mt-2 whitespace-nowrap rounded bg-black/85 px-2 py-1 text-[10px] font-sans text-amber-200">Call</span>
+                  </span>
+                )}
                  {/* Payphone Backboard */}
                  <div className="w-12 h-20 bg-shade-33 rounded-sm border-2 border-wood-ink shadow-[10px_10px_20px_rgba(0,0,0,0.8)] flex flex-col items-center pt-1" />
                  {/* Payphone Red Body */}
@@ -373,7 +457,15 @@ export default function OfficeRoom() {
             </div>
 
             {/* Interactive Light Switch (Moved next to double doors) */}
-            <div className="absolute top-48 md:top-64 right-40 md:right-[350px] pointer-events-auto scale-75 md:scale-100 origin-right touch-manipulation z-30 flex flex-col items-center">
+            <div className="absolute top-48 md:top-64 right-40 md:right-[350px] pointer-events-auto scale-75 md:scale-100 origin-right touch-manipulation z-30 flex flex-col items-center group/hotspot">
+              {/* P10: hotspot dot */}
+              {!seen.switch && !prefersReducedMotion && (
+                <span className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 flex w-5 h-5" aria-hidden="true">
+                  <span className="hotspot-ping absolute inline-flex h-full w-full rounded-full bg-amber-300" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 m-auto bg-amber-300 border border-black/40" />
+                  <span className="hotspot-tooltip absolute left-1/2 top-full mt-2 whitespace-nowrap rounded bg-black/85 px-2 py-1 text-[10px] font-sans text-amber-200">Lights</span>
+                </span>
+              )}
               
               {/* LED Indicator Dot */}
               <div className={`mb-1.5 w-1.5 h-1.5 rounded-full ${!isNightMode ? 'bg-shade-36 shadow-[0_0_6px_1px_var(--color-shade-36)]' : 'bg-shade-37 shadow-[0_0_6px_1px_var(--color-shade-37)]'} transition-colors duration-300`} />
@@ -460,10 +552,14 @@ export default function OfficeRoom() {
                     role="button"
                     tabIndex={0}
                     aria-label="Quick Contact"
-                    onClick={() => { playPickUpClack(); setIsDeskPhoneOpen(true); }}
+                    onClick={() => { phoneDoneRef.current = true; stopRing(); setIncomingCall(false); markSeen("phone"); playPickUpClack(); setIsDeskPhoneOpen(true); }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
+                        phoneDoneRef.current = true;
+                        stopRing();
+                        setIncomingCall(false);
+                        markSeen("phone");
                         playPickUpClack();
                         setIsDeskPhoneOpen(true);
                       }
@@ -512,7 +608,7 @@ export default function OfficeRoom() {
           style={{ rotateY: scrollRoom2RotateY, z: scrollRoom2Z, opacity: scrollRoom2Opacity }}
           className="absolute inset-0 preserve-3d flex items-center justify-center pointer-events-none"
         >
-          <RoomTwo isNightMode={isNightMode} rotateX={rotateX} rotateY={rotateY} panX={panX} panY={panY} onOpenWritings={() => setIsBookshelfOpen(true)} onOpenMission={() => setIsMissionOpen(true)} />
+          <RoomTwo isNightMode={isNightMode} rotateX={rotateX} rotateY={rotateY} panX={panX} panY={panY} onOpenWritings={() => setIsBookshelfOpen(true)} onOpenMission={() => setIsMissionOpen(true)} onOpenTerminal={() => { playClickSound(); setTerminalSession((s) => s + 1); setIsTerminalOpen(true); }} />
         </motion.div>
 
       {/* ========================================================= */}
@@ -523,16 +619,56 @@ export default function OfficeRoom() {
         
       {/* VIGNETTE & RADIAL BULB GLOW */}
       <div className={`absolute inset-0 pointer-events-none z-40 transition-opacity duration-1000 bg-[radial-gradient(circle_at_50%_50%,transparent_50%,var(--color-green-racing-deep)_120%)] ${isNightMode ? "opacity-80" : "opacity-40"}`} />
+      {/* P2: night light cone spilling from the bulb (screen blend) */}
+      <div aria-hidden="true" className={`absolute inset-0 pointer-events-none z-40 mix-blend-screen bg-[radial-gradient(ellipse_at_82%_0%,rgba(255,190,80,0.28),rgba(255,190,80,0.08)_35%,transparent_60%)] transition-opacity duration-1000 ${isNightMode ? "opacity-100" : "opacity-0"}`} />
+      {/* P11: door-reveal welcome cue, fades on first scroll */}
+      <motion.div style={{ opacity: welcomeOpacity }} className="absolute inset-x-0 top-[18%] z-40 flex justify-center pointer-events-none">
+        <p className="rounded-full border border-accent-brass/40 bg-black/50 px-5 py-2 font-serif text-sm italic tracking-wide text-accent-gold backdrop-blur-sm">
+          Welcome — scroll to enter
+        </p>
+      </motion.div>
+      {/* P13: konami confetti + verdict toast */}
+      {!prefersReducedMotion && confetti.length > 0 && (
+        <div aria-hidden="true" className="absolute inset-0 z-[60] overflow-hidden pointer-events-none">
+          {confetti.map((c) => (
+            <span
+              key={c.id}
+              className="animate-confetti-fall absolute top-0 w-2 h-3 rounded-[2px]"
+              style={{ left: `${c.left}%`, backgroundColor: c.color, animationDelay: `${c.delay}s` }}
+            />
+          ))}
+        </div>
+      )}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            role="status"
+            className="absolute bottom-20 left-1/2 -translate-x-1/2 z-[60] rounded-full border border-accent-brass/50 bg-black/80 px-5 py-2.5 font-serif text-sm text-accent-gold shadow-xl pointer-events-none"
+          >
+            ⚖️ {toast}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
         {/* Top-Right Hanging Bulb Indicator */}
-        <motion.div style={{ y: bulbScrollY, opacity: bulbOpacity }} role="button" tabIndex={0} aria-label="About Emmanuel Baraka" onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setIsAboutOpen(true); } }} onClick={() => setIsAboutOpen(true)} className={`absolute top-0 right-12 md:right-32 flex flex-col items-center group pointer-events-auto cursor-pointer origin-top hover:rotate-6 transition-transform duration-700 ease-in-out z-50 ${prefersReducedMotion ? "" : "animate-swing"} touch-manipulation active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-brass focus-visible:ring-offset-8 focus-visible:ring-offset-transparent rounded-full before:absolute before:-inset-6 before:content-[\'\']`}>
-          <div className={`flex flex-col items-center transition-all duration-300 ${prefersReducedMotion ? "" : "group-hover:translate-y-1 group-active:translate-y-4"}`}>
+        <motion.div style={{ y: bulbScrollY, opacity: bulbOpacity, rotate: prefersReducedMotion ? 0 : bulbRotate }} role="button" tabIndex={0} aria-label="About Emmanuel Baraka" onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); markSeen("bulb"); setIsAboutOpen(true); } }} onClick={() => { markSeen("bulb"); setIsAboutOpen(true); }} onHoverStart={() => { if (!prefersReducedMotion && !flickering) { setFlickering(true); window.setTimeout(() => setFlickering(false), 500); } }} className="absolute top-0 right-12 md:right-32 flex flex-col items-center group group/hotspot pointer-events-auto cursor-pointer origin-top z-50 touch-manipulation active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-brass focus-visible:ring-offset-8 focus-visible:ring-offset-transparent rounded-full before:absolute before:-inset-6 before:content-['']">
+          {!seen.bulb && !prefersReducedMotion && (
+            <span className="absolute top-24 -left-3 z-20 flex w-5 h-5" aria-hidden="true">
+              <span className="hotspot-ping absolute inline-flex h-full w-full rounded-full bg-amber-300" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 m-auto bg-amber-300 border border-black/40" />
+              <span className="hotspot-tooltip absolute left-1/2 top-full mt-2 whitespace-nowrap rounded bg-black/85 px-2 py-1 text-[10px] font-sans text-amber-200">About</span>
+            </span>
+          )}
+          <div className={`${prefersReducedMotion ? "" : "animate-swing"} flex flex-col items-center origin-top transition-all duration-300 ${prefersReducedMotion ? "" : "group-hover:translate-y-1 group-active:translate-y-4"}`}>
           {/* The Cord */}
           <div className="w-[2px] h-16 md:h-24 bg-mono-900 shadow-[1px_0_0_rgba(255,255,255,0.1)]" />
           {/* The Bulb Base */}
           <div className="w-4 h-5 bg-gradient-to-b from-mono-850 to-mono-600 rounded-t-sm border border-mono-900" />
           {/* The Bulb Glass */}
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center -mt-1 transition-all duration-1000 ${
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center -mt-1 transition-all duration-1000 ${flickering && !prefersReducedMotion ? "animate-bulb-flicker" : ""} ${
             isNightMode 
               ? "bg-shade-48 shadow-[0_0_50px_rgba(255,170,0,0.8),inset_0_0_10px_rgba(255,255,255,0.8)]"
               : "bg-white/10 shadow-[inset_0_0_5px_rgba(255,255,255,0.2)] border border-white/20 backdrop-blur-sm" + " group-hover:shadow-[0_0_30px_rgba(212,175,55,0.6)] group-active:brightness-150"
@@ -565,6 +701,20 @@ export default function OfficeRoom() {
             </div>
           </div>
 
+          {/* P5: ambient sound toggle */}
+          <div className="pointer-events-auto flex items-center gap-2">
+            <button
+              type="button"
+              onClick={toggleMuted}
+              aria-pressed={!muted}
+              aria-label={muted ? "Unmute ambient sound" : "Mute ambient sound"}
+              title={muted ? "Unmute rain" : "Mute rain"}
+              className="p-2 rounded-full border border-accent-brass/40 bg-black/40 text-accent-gold hover:bg-black/60 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-brass"
+            >
+              {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            </button>
+          </div>
+
         </header>
 
         {/* Footer Ambient Cue */}
@@ -590,6 +740,19 @@ export default function OfficeRoom() {
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
       <ContactModal isOpen={isDeskPhoneOpen} onClose={() => setIsDeskPhoneOpen(false)} />
       <SimuYaJamiiModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+      <LaptopTerminalModal
+        key={terminalSession}
+        isOpen={isTerminalOpen}
+        onClose={() => setIsTerminalOpen(false)}
+        actions={{
+          openAbout: () => setIsAboutOpen(true),
+          openWritings: () => setIsBookshelfOpen(true),
+          openContact: () => setIsDeskPhoneOpen(true),
+          openBooking: () => setIsBookingOpen(true),
+          openMission: () => setIsMissionOpen(true),
+          setNight: (night) => { playClickSound(); setIsNightMode(night); },
+        }}
+      />
       
       {/* Custom Cursor (Rendered last to stay on top of everything) */}
       <CustomCursor isNightMode={isNightMode} />

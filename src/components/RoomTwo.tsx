@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { motion, MotionValue, useReducedMotion } from "framer-motion";
+import { motion, MotionValue, useReducedMotion, useTransform, AnimatePresence } from "framer-motion";
 import { Scale, BookOpen } from "lucide-react";
+
+const WEIGH_VERDICTS = [
+  "The scales tip toward mercy — matter adjourned for tea.",
+  "Evidence weighed: 100% curiosity, 0% doubt sustained.",
+  "Objection overruled — the scales admire your persistence.",
+  "Judgment reserved… the scales need a recess (and a biscuit).",
+];
 
 interface RoomTwoProps {
   isNightMode: boolean;
@@ -10,10 +17,33 @@ interface RoomTwoProps {
   panY: MotionValue<number>;
   onOpenWritings: () => void;
   onOpenMission: () => void;
+  onOpenTerminal: () => void;
 }
 
-export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onOpenWritings, onOpenMission }: RoomTwoProps) {
+export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onOpenWritings, onOpenMission, onOpenTerminal }: RoomTwoProps) {
   const prefersReducedMotion = useReducedMotion();
+  // P10: hotspot dots dismiss after first interaction each
+  const [seen, setSeen] = useState<Record<string, boolean>>({});
+  const markSeen = (id: string) => setSeen((s) => (s[id] ? s : { ...s, [id]: true }));
+  // P13: scales easter egg — click 5x for a verdict
+  const [weighs, setWeighs] = useState(0);
+  const [verdict, setVerdict] = useState<string | null>(null);
+  // P7: gaze follows the same pointer springs that drive room parallax
+  const eyeX = useTransform(panX, [-26, 26], [-2.5, 2.5]);
+  const eyeY = useTransform(panY, [-20, 20], [-1.5, 2]);
+  const headX = useTransform(panX, [-26, 26], [-4, 4]);
+  const headShiftY = useTransform(panY, [-20, 20], [-2, 3]);
+
+  const handleWeigh = () => {
+    const next = weighs + 1;
+    if (next >= 5) {
+      setVerdict(WEIGH_VERDICTS[Math.floor(Math.random() * WEIGH_VERDICTS.length)]);
+      setWeighs(0);
+      window.setTimeout(() => setVerdict(null), 3600);
+    } else {
+      setWeighs(next);
+    }
+  };
   return (
     <motion.div
       style={{ rotateX, rotateY, x: panX, y: panY }}
@@ -62,7 +92,46 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
 
           {/* Center: Massive Arched Window */}
           <div className="absolute top-10 w-[45%] h-[85%] border-[12px] border-wood-dark rounded-t-full bg-transparent shadow-[0_0_50px_rgba(0,0,0,0.8),inset_0_0_40px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col justify-end">
-             {/* Window Grilles */}
+              {/* P6: sun / moon that swaps with night mode */}
+              <div
+                aria-hidden="true"
+                className={`absolute top-[8%] left-1/2 -translate-x-1/2 rounded-full transition-colors duration-1000 ${
+                  isNightMode
+                    ? "w-10 h-10 md:w-14 md:h-14 bg-slate-100 shadow-[0_0_30px_rgba(226,232,240,0.8)]"
+                    : "w-12 h-12 md:w-16 md:h-16 bg-amber-300 shadow-[0_0_40px_rgba(251,191,36,0.9)]"
+                }`}
+              >
+                {isNightMode && (
+                  <>
+                    <div className="absolute top-2 left-2 w-2.5 h-2.5 rounded-full bg-slate-300/80" />
+                    <div className="absolute bottom-3 right-3 w-1.5 h-1.5 rounded-full bg-slate-300/70" />
+                  </>
+                )}
+              </div>
+              {/* P6: drifting clouds */}
+              {!prefersReducedMotion && (
+                <>
+                  <div aria-hidden="true" className={`absolute top-[22%] left-[8%] w-24 h-6 md:w-32 md:h-8 rounded-full blur-md transition-opacity duration-1000 ${isNightMode ? "bg-slate-400/20" : "bg-white/50"} animate-cloud-drift`} />
+                  <div aria-hidden="true" className={`absolute top-[32%] right-[6%] w-20 h-5 md:w-28 md:h-7 rounded-full blur-md transition-opacity duration-1000 ${isNightMode ? "bg-slate-400/15" : "bg-white/40"} animate-cloud-drift`} style={{ animationDelay: "-6s" }} />
+                </>
+              )}
+              {/* P6: animated rain streaks */}
+              {!prefersReducedMotion && (
+                <div aria-hidden="true" className={`absolute inset-0 transition-opacity duration-1000 ${isNightMode ? "opacity-70" : "opacity-40"}`}>
+                  {[...Array(12)].map((_, i) => (
+                    <span
+                      key={i}
+                      className="animate-rain-line absolute top-0 w-px h-10 bg-gradient-to-b from-transparent via-sky-200/80 to-transparent"
+                      style={{
+                        left: `${6 + i * 8}%`,
+                        animationDelay: `${(i % 5) * 0.28}s`,
+                        animationDuration: `${1.1 + (i % 4) * 0.22}s`,
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+              {/* Window Grilles */}
              <div className="absolute inset-0 grid grid-cols-3 grid-rows-4 pointer-events-none z-10">
                 {[...Array(12)].map((_, i) => (
                   <div key={i} className="border-2 border-wood-dark/90 shadow-sm" />
@@ -94,9 +163,17 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
           <motion.div 
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={onOpenWritings}
-            className="relative w-40 md:w-56 h-56 md:h-80 rounded bg-wood-dark border-4 border-wood-mahogany shadow-[15px_15px_30px_rgba(0,0,0,0.6)] p-2 flex flex-col justify-between cursor-pointer pointer-events-auto group mt-4 hover:scale-[1.02] active:scale-[0.98] transition-transform"
+            onClick={() => { markSeen("bookshelf"); onOpenWritings(); }}
+            className="group/hotspot relative w-40 md:w-56 h-56 md:h-80 rounded bg-wood-dark border-4 border-wood-mahogany shadow-[15px_15px_30px_rgba(0,0,0,0.6)] p-2 flex flex-col justify-between cursor-pointer pointer-events-auto group mt-4 hover:scale-[1.02] active:scale-[0.98] transition-transform"
           >
+            {/* P10: hotspot dot, dismissed after first open */}
+            {!seen.bookshelf && !prefersReducedMotion && (
+              <span className="absolute -top-1.5 -left-1.5 z-20 flex w-5 h-5" aria-hidden="true">
+                <span className="hotspot-ping absolute inline-flex h-full w-full rounded-full bg-amber-300" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 m-auto bg-amber-300 border border-black/40" />
+                <span className="hotspot-tooltip absolute left-1/2 top-full mt-2 whitespace-nowrap rounded bg-black/85 px-2 py-1 text-[10px] font-sans text-amber-200">Writings</span>
+              </span>
+            )}
             {/* Attention Badge */}
             <div className="absolute -top-3 -right-3 px-3 py-1 bg-accent-terracotta rounded-full shadow-lg flex items-center gap-1.5 opacity-90 group-hover:opacity-100 group-hover:bg-shade-62 transition-colors z-20">
                <BookOpen className="w-3 h-3 text-accent-gold" />
@@ -140,8 +217,8 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
           
           {/* Avatar Contact Shadow */}
           <div className="absolute -bottom-2 w-28 h-6 bg-black/40 blur-md rounded-[50%]" />
-          {/* Head & Face */}
-          <div className="relative w-24 h-32 mb-1">
+          {/* Head & Face (P7: head drifts subtly with pointer) */}
+          <motion.div style={prefersReducedMotion ? undefined : { x: headX, y: headShiftY }} className="relative w-24 h-32 mb-1">
             {/* Head Base */}
             <div className="absolute inset-0 bg-gradient-to-br from-shade-70 to-shade-15 rounded-[2.5rem] shadow-inner" />
             {/* Hair / Receding Hairline */}
@@ -152,12 +229,12 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
             {/* Brows */}
             <div className="absolute top-10 left-3 w-6 h-1.5 bg-mono-950 rounded-full rotate-[5deg]" />
             <div className="absolute top-10 right-3 w-6 h-1.5 bg-mono-950 rounded-full -rotate-[5deg]" />
-            {/* Eyes (Looking down at laptop) */}
+            {/* Eyes (P7: gaze follows cursor; lids blink) */}
             <div className={`absolute top-14 left-4 w-5 h-2.5 bg-white rounded-full flex items-center justify-center overflow-hidden border-t-2 border-shade-16 shadow-inner ${prefersReducedMotion ? "" : "animate-blink"}`}>
-               <div className="w-2.5 h-2.5 bg-shade-17 rounded-full translate-y-0.5" />
+               <motion.div style={prefersReducedMotion ? undefined : { x: eyeX, y: eyeY }} className="w-2.5 h-2.5 bg-shade-17 rounded-full translate-y-0.5" />
             </div>
             <div className={`absolute top-14 right-4 w-5 h-2.5 bg-white rounded-full flex items-center justify-center overflow-hidden border-t-2 border-shade-16 shadow-inner ${prefersReducedMotion ? "" : "animate-blink"}`}>
-               <div className="w-2.5 h-2.5 bg-shade-17 rounded-full translate-y-0.5" />
+               <motion.div style={prefersReducedMotion ? undefined : { x: eyeX, y: eyeY }} className="w-2.5 h-2.5 bg-shade-17 rounded-full translate-y-0.5" />
             </div>
             {/* Nose */}
             <div className="absolute top-16 left-1/2 -translate-x-1/2 w-4 h-8 bg-black/10 rounded-full border-b border-black/20" />
@@ -171,7 +248,7 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
             <div className="absolute top-13 left-3 w-7 h-5 border border-white/20 rounded-md" />
             <div className="absolute top-13 right-3 w-7 h-5 border border-white/20 rounded-md" />
             <div className="absolute top-14 left-1/2 -translate-x-1/2 w-2 h-0.5 bg-white/20" />
-          </div>
+          </motion.div>
 
           {/* Torso / Suit */}
           <div className="relative w-44 h-40 flex flex-col items-center z-0 [transform-style:preserve-3d]">
@@ -186,13 +263,21 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
             <div className="absolute top-0 left-[30%] w-6 h-32 bg-mono-950 border-r border-black/40 rotate-12 shadow-xl" />
             <div className="absolute top-0 right-[30%] w-6 h-32 bg-mono-950 border-l border-black/40 -rotate-12 shadow-xl" />
             
-            {/* Arms holding a book */}
-            <div className="absolute top-8 -left-3 w-16 h-32 bg-mono-925 rounded-l-2xl origin-top rotate-[25deg] shadow-lg flex flex-col justify-end items-center pb-2 z-10">
+            {/* Arms holding a book (P7: subtle typing bob) */}
+            <motion.div
+              animate={prefersReducedMotion ? undefined : { y: [0, 1.5, 0] }}
+              transition={prefersReducedMotion ? undefined : { repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
+              className="absolute top-8 -left-3 w-16 h-32 bg-mono-925 rounded-l-2xl origin-top rotate-[25deg] shadow-lg flex flex-col justify-end items-center pb-2 z-10"
+            >
                <div className="w-5 h-6 bg-shade-71 rounded-full translate-x-2 translate-y-1 shadow-inner" />
-            </div>
-            <div className="absolute top-8 -right-3 w-16 h-32 bg-mono-925 rounded-r-2xl origin-top -rotate-[25deg] shadow-lg flex flex-col justify-end items-center pb-2 z-10">
+            </motion.div>
+            <motion.div
+              animate={prefersReducedMotion ? undefined : { y: [0, 1.5, 0] }}
+              transition={prefersReducedMotion ? undefined : { repeat: Infinity, duration: 1.6, ease: "easeInOut", delay: 0.3 }}
+              className="absolute top-8 -right-3 w-16 h-32 bg-mono-925 rounded-r-2xl origin-top -rotate-[25deg] shadow-lg flex flex-col justify-end items-center pb-2 z-10"
+            >
                <div className="w-5 h-6 bg-shade-71 rounded-full -translate-x-2 translate-y-1 shadow-inner" />
-            </div>
+            </motion.div>
             
             {/* The Book being held */}
             <div className="absolute top-[110px] left-1/2 -translate-x-1/2 w-24 h-14 bg-shade-13 rounded-sm border-r border-l border-wood-mahogany shadow-[0_15px_30px_rgba(0,0,0,0.8)] z-20 flex p-0.5 [transform:translateZ(40px)_rotateX(20deg)]">
@@ -240,19 +325,61 @@ export default function RoomTwo({ isNightMode, rotateX, rotateY, panX, panY, onO
               <div className="w-16 h-4 rounded-full bg-gradient-to-r from-shade-13 to-accent-brass shadow-xl -mt-1" />
             </div>
 
-            {/* Brass Scales of Justice */}
-            <div className="flex flex-col items-center mt-6">
+            {/* Brass Scales of Justice (P13: click 5x to weigh) */}
+            <motion.button
+              type="button"
+              onClick={handleWeigh}
+              key={weighs}
+              animate={weighs > 0 && !prefersReducedMotion ? { rotate: [0, -8, 8, -4, 0] } : {}}
+              transition={{ duration: 0.5 }}
+              aria-label="Weigh evidence on the scales of justice"
+              title={weighs > 0 ? `${5 - weighs} more…` : "Click the scales"}
+              className="relative flex flex-col items-center mt-6 cursor-pointer rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-brass"
+            >
                <Scale className="w-12 h-12 md:w-16 md:h-16 text-accent-brass drop-shadow-[0_8px_16px_rgba(0,0,0,0.9)]" strokeWidth={1.5} />
                <div className="w-10 h-2.5 rounded-full bg-accent-brass-dim mt-1 shadow-md" />
-            </div>
+               <AnimatePresence>
+                 {verdict && (
+                   <motion.span
+                     initial={{ opacity: 0, y: 6 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     exit={{ opacity: 0 }}
+                     className="absolute -top-14 left-1/2 -translate-x-1/2 w-44 rounded-lg bg-black/85 px-2.5 py-1.5 text-[10px] leading-snug text-amber-200 shadow-xl z-20 pointer-events-none"
+                   >
+                     ⚖️ {verdict}
+                   </motion.span>
+                 )}
+               </AnimatePresence>
+            </motion.button>
           </div>
 
-          {/* Center: Open Laptop (Terminal/Code) */}
+          {/* Center: Open Laptop (Terminal/Code) — click to open the interactive shell */}
           <div className="flex flex-col items-center z-10 -mt-8 mx-auto">
             {/* Screen */}
-            <div className={`w-40 h-28 md:w-72 md:h-48 rounded-t-xl bg-shade-20 border-4 border-mono-950 p-2 md:p-3 flex flex-col justify-start transition-all duration-1000 relative overflow-hidden ${
+            <div
+              role="button"
+              tabIndex={0}
+              aria-label="Open interactive terminal"
+              title="Click to type in the terminal"
+              onClick={() => { markSeen("laptop"); onOpenTerminal(); }}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); markSeen("laptop"); onOpenTerminal(); } }}
+              className={`group group/hotspot w-40 h-28 md:w-72 md:h-48 rounded-t-xl bg-shade-20 border-4 border-mono-950 p-2 md:p-3 flex flex-col justify-start transition-all duration-1000 relative overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-brass hover:border-accent-brass/60 ${
               isNightMode ? "shadow-[0_0_80px_rgba(52,211,153,0.2)]" : "shadow-2xl"
             }`}>
+              {/* P10: hotspot dot */}
+              {!seen.laptop && !prefersReducedMotion && (
+                <span className="absolute top-1.5 left-1/2 -translate-x-1/2 z-20 flex w-5 h-5" aria-hidden="true">
+                  <span className="hotspot-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 m-auto bg-emerald-300 border border-black/40" />
+                  <span className="hotspot-tooltip absolute left-1/2 top-full mt-2 whitespace-nowrap rounded bg-black/85 px-2 py-1 text-[10px] font-sans text-emerald-200">Try typing</span>
+                </span>
+              )}
+              {/* Screen Glare */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 pointer-events-none" />
+              {/* Hover hint */}
+              <div className="absolute bottom-1.5 right-2 px-2 py-0.5 rounded-full bg-black/60 text-emerald-300 font-mono text-[8px] md:text-[10px] opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity pointer-events-none">
+                click to type ▸
+              </div>
               {/* Screen Glare */}
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 pointer-events-none" />
               

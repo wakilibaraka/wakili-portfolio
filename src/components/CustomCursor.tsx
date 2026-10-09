@@ -1,15 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { MousePointer2, Pointer } from "lucide-react";
 
+interface InkDot {
+  id: number;
+  x: number;
+  y: number;
+}
+
 export default function CustomCursor({ isNightMode }: { isNightMode: boolean }) {
+  const prefersReducedMotion = useReducedMotion();
   const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
+  // P12: ink trail dots (throttled, capped)
+  const [trail, setTrail] = useState<InkDot[]>([]);
+  const lastDotRef = useRef(0);
+  const dotIdRef = useRef(0);
 
   useEffect(() => {
     const updateMousePosition = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
+
+      // P12: spawn a fading ink dot, throttled, max ~20 alive
+      if (!prefersReducedMotion) {
+        const now = performance.now();
+        if (now - lastDotRef.current > 45) {
+          lastDotRef.current = now;
+          const id = ++dotIdRef.current;
+          setTrail((t) => [...t.slice(-19), { id, x: e.clientX, y: e.clientY }]);
+          window.setTimeout(() => {
+            setTrail((t) => t.filter((d) => d.id !== id));
+          }, 700);
+        }
+      }
       
       const target = e.target as HTMLElement;
       if (
@@ -36,7 +60,7 @@ export default function CustomCursor({ isNightMode }: { isNightMode: boolean }) 
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
     return null;
@@ -48,6 +72,15 @@ export default function CustomCursor({ isNightMode }: { isNightMode: boolean }) 
 
   return (
     <>
+      {/* P12: ink trail (skipped on touch via early return + reduced motion via sampler) */}
+      {trail.map((d) => (
+        <span
+          key={d.id}
+          aria-hidden="true"
+          className={`ink-dot fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[9998] ${isNightMode ? "bg-emerald-400/70" : "bg-accent-brass/70"}`}
+          style={{ left: d.x - 4, top: d.y - 4 }}
+        />
+      ))}
       <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[9999]"
         animate={{
